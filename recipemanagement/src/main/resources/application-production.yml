@@ -1,0 +1,29 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: path_pattern_parser
+    servlet:
+      multipart:
+        enabled: true
+        file-size-threshold: 100KB
+        max-file-size: 200MB
+        max-request-size: 200MB
+    http:
+      multipart:
+        max-file-size: 200MB
+        max-request-size: 200MB
+    data:
+      web:
+        pageable:
+          page-parameter: page
+          size-parameter: size
+          default-page-size: 6
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/stevicdb
+    pool:
+      enabled: true
+    username: stevic
+    password: 'Abc12345_'
+
+
+
