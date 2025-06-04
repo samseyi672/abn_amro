@@ -1,0 +1,25 @@
+# Ignore build outputs
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.vs/
+.vscode/
+
+# Logs
+*.log
+
+# Configs
+**/appsettings.json
+**/secrets.json
+recipemanager_fr/node_modules
+# NuGet packages
+*.nupkg
+packages/
+
+# Publish folder (optional)
+publish/
+bin/
