@@ -5,8 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
 
 @Data
 @Builder
@@ -14,7 +12,7 @@ import org.springframework.data.relational.core.mapping.Column;
         name = "Rating",
         description = "Schema to hold Rating information"
 )
-public class Rating {
+public class RatingDTO {
 
     @Schema(
             description = "pass zero if rating is new ", example = "0 or digit"
