@@ -24,7 +24,7 @@ import java.util.Set;
 public class UserDTO {
     @Schema(
             name = "id",
-            description = "Only details required.pass zero if id is new"
+            description = "Only details required.pass zero if user is new"
     )
     @NotNull(message = "id cannot be null")
     private Long id;
@@ -39,12 +39,12 @@ public class UserDTO {
             description = "Unique email"
     )
     private String email;
-    @Schema(
-            name = "password",
-            description = "user password"
-    )
-    @NotEmpty(message = "password cannot be empty")
-    private String password;
+//    @Schema(
+//            name = "password",
+//            description = "user password"
+//    )
+//    @NotEmpty(message = "password cannot be empty")
+//    private String password;
     @Schema(
             name = "enabled",
             description = "users activation",

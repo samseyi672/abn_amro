@@ -3,6 +3,7 @@ package com.abn_amro.usermanagment.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,9 +11,10 @@ import java.util.Set;
 @Table(name = "roles")
 @Entity
 @Data
+@ToString
 public class Role extends BaseEntity{
     @Column(name="role")
-    private String role ;
+    private String name;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "role_permissions",

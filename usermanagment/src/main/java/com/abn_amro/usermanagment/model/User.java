@@ -2,12 +2,16 @@ package com.abn_amro.usermanagment.model;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Table(name = "users")
 @Entity
+@Data
+@ToString
 public class User extends BaseEntity {
     @Column(unique = true)
     private String username;

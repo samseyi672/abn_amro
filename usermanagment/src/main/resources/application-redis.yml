@@ -1,0 +1,16 @@
+spring:
+  redis:
+    client-type: jedis
+    jedis:
+      pool:
+        max-total: 16
+        max-idle: 8
+        min-idle: 4
+    host: 10.20.21.25
+    port: 6379
+    password: "Trust@@$$Banc_COOperate**#%%$$Group"
+    timeout: 6000
+    database: 0
+    spring:
+      redis:
+        client-type=jedis:

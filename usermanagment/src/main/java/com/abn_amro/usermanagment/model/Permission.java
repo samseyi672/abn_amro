@@ -3,6 +3,7 @@ package com.abn_amro.usermanagment.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Table(name = "permissions")
 @Entity
 @Data
+@ToString
 public class Permission {
 
     @Column(name="permission")

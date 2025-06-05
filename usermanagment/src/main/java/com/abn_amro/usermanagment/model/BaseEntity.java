@@ -12,7 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
-@ToString
+
 @MappedSuperclass
 @Data
 @EntityListeners(AuditListener.class)
