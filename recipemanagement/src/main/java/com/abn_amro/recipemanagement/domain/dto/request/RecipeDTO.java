@@ -1,4 +1,4 @@
-package com.abn_amro.recipemanagement.domain.dto;
+package com.abn_amro.recipemanagement.domain.dto.request;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +20,7 @@ public class RecipeDTO {
             description = "pass zero if recipe is new ", example = "0 or recipe id"
     )
     private Long id;
+
     @NotEmpty(message = "title cannot be empty")
     @Schema(
             description = "Title", example = "Mr/Mrs/Dr/Prof"

@@ -1,7 +1,7 @@
 package com.abn_amro.recipemanagement.domain.mapper;
 
 
-import com.abn_amro.recipemanagement.domain.dto.TagDTO;
+import com.abn_amro.recipemanagement.domain.dto.request.TagDTO;
 import com.abn_amro.recipemanagement.domain.entities.Tag;
 import org.mapstruct.Mapper;
 

@@ -1,4 +1,4 @@
-package com.abn_amro.recipemanagement.domain.dto;
+package com.abn_amro.recipemanagement.domain.dto.request;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

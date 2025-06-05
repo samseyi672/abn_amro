@@ -1,7 +1,7 @@
 package com.abn_amro.recipemanagement.domain.mapper;
 
 
-import com.abn_amro.recipemanagement.domain.dto.IngredientDTO;
+import com.abn_amro.recipemanagement.domain.dto.request.IngredientDTO;
 import com.abn_amro.recipemanagement.domain.entities.Ingredient;
 import org.mapstruct.Mapper;
 

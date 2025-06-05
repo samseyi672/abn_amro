@@ -1,6 +1,6 @@
 package com.abn_amro.recipemanagement.domain.mapper;
 
-import com.abn_amro.recipemanagement.domain.dto.CommentDTO;
+import com.abn_amro.recipemanagement.domain.dto.request.CommentDTO;
 import com.abn_amro.recipemanagement.domain.entities.Comment;
 import org.mapstruct.Mapper;
 
