@@ -39,12 +39,12 @@ public class UserDTO {
             description = "Unique email"
     )
     private String email;
-//    @Schema(
-//            name = "password",
-//            description = "user password"
-//    )
-//    @NotEmpty(message = "password cannot be empty")
-//    private String password;
+    @Schema(
+            name = "password",
+            description = "user password"
+    )
+    @NotEmpty(message = "password cannot be empty")
+    private String password;
     @Schema(
             name = "enabled",
             description = "users activation",
