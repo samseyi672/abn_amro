@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 
@@ -39,6 +40,7 @@ public class SendWelcomeEmailListener {
     }
 
     @EventListener
+    @Async
     public void handleUserRegistered(UserRegisteredEvent event) throws IOException, MailServerException {
         log.info("Sending welcome email to: " + event.getEmail());
         NameEmailDTO nameEmailDTO = new NameEmailDTO();

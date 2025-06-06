@@ -8,9 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @ToString
@@ -31,19 +29,19 @@ public class UserDTO {
             description = "firstname of the user"
     )
     @NotEmpty(message = "firstname cannot be empty")
-    private String firstname ;
+    private String firstName;
     @Schema(
             name = "lastname",
             description = "lastname of the user"
     )
     @NotEmpty(message = "lastname cannot be empty")
-    private  String lastname ;
+    private  String lastName;
     @Schema(
             name = "username",
             description = "Unique username"
     )
     @NotEmpty(message = "username cannot be empty")
-    private String username;
+    private String userName;
     @Schema(
             name = "email",
             description = "Unique email needed"

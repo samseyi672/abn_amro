@@ -11,7 +11,6 @@ import com.abn_amro.usermanagment.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -41,7 +38,7 @@ public class UserServiceImpl implements UserService {
        user1.setPassword(null);
        log.info("created user "+user1);
        UserRegisteredEvent event = new UserRegisteredEvent(user1.getId(),
-               user1.getFirstname(),user1.getFirstname(),
+               user1.getFirstName(),user1.getFirstName(),
                user1.getEmail());
        eventPublisherAware.publishEvent(event);
       return user;
@@ -76,13 +73,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> searchUserByUserName(String username, int page, int size, boolean isEnabled) {
+    public Page<UserDTO> searchByUsernameOrEmailOrFirstName(String userName, String email, String firstName, int page, int size, boolean isEnabled) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> users;
-        if (isEnabled) {
-            users = userRepositories.findByUsernameContainingIgnoreCaseAndEnabledTrue(username, pageable);
+        if ((userName == null || userName.isBlank()) &&
+                (email == null || email.isBlank()) &&
+                (firstName == null || firstName.isBlank())) {
+            users = isEnabled ?
+                    userRepositories.findByEnabledTrue(pageable) :
+                    userRepositories.findAll(pageable);
+
         } else {
-            users = userRepositories.findByUsernameContainingIgnoreCase(username, pageable);
+            users = isEnabled ?
+                    userRepositories.findByEnabledTrueAndUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstnameContainingIgnoreCase(
+                            userName != null ? userName : "",
+                            email != null ? email : "",
+                            firstName != null ? firstName : "",
+                            pageable
+                    ) :
+                    userRepositories.findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstnameContainingIgnoreCase(
+                            userName != null ? userName : "",
+                            email != null ? email : "",
+                            firstName != null ? firstName : "",
+                            pageable
+                    );
         }
         if (users.isEmpty()) {
             throw new UserNotFoundException(ResponseConstants.MESSAGE_NOT_FOUND);
@@ -101,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User user = userRepositories.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
-        user.setUsername(userDTO.getUsername());
+        user.setUserName(userDTO.getUserName());
         user.setEmail(userDTO.getEmail());
         user.setEnabled(userDTO.isEnabled());
         if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {

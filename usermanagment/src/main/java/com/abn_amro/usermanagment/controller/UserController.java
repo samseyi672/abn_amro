@@ -12,11 +12,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +40,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(description = "search either active or inactive user endpoint")
+    @Operation(description = "Get all users and search by username or email or firstname endpoint")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "20o",
@@ -54,14 +54,18 @@ public class UserController {
                     )
             )
     })
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponse<Page<UserDTO>>> searchByUsername(
-            @RequestParam String keyword,
+    @Cacheable(value = "userSearchCache", key = "T(java.util.Objects).hash(#username, #email, #firstname, #page, #size, #isEnabled)")
+    @GetMapping("/search_by_username_email_firstname")
+    public ResponseEntity<ApiResponse<Page<UserDTO>>> searchByUsernameOrEmailOrFirstName(
+            @RequestParam String userName,
+            @RequestParam String email,
+            @RequestParam String firstName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam boolean active) {
-        ApiResponse<Page<UserDTO>> pageApiResponse = ApiResponse.success(userService.searchUserByUserName(keyword, page, size,active),
-                null, ResponseConstants.STATUS_201,ResponseConstants.MESSAGE_201);
+        ApiResponse<Page<UserDTO>> pageApiResponse = ApiResponse.success(userService
+                        .searchByUsernameOrEmailOrFirstName(userName,email,firstName, page, size,active),
+                null,ResponseConstants.STATUS_201,ResponseConstants.MESSAGE_201);
         return ResponseEntity.ok(pageApiResponse);
     }
 
@@ -81,7 +85,7 @@ public class UserController {
                     )
             )
     })
-    @PostMapping("/create_user")
+    @PostMapping("/")
     public ResponseEntity<ApiResponse<Long>>  createUser(@Valid @RequestBody UserDTO userDTO){
         User user = userService.createUser(userDTO);
         ApiResponse<Long> response = ApiResponse.success(user.getId(),"",ResponseConstants.STATUS_201,
@@ -95,32 +99,32 @@ public class UserController {
                 .body(response);
     }
 
-    @Operation(
-            summary = "Get All Users REST API",
-            description = "Endpoint to get all users")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "200",
-                    description = "HTTP Status OK"
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    })
-    @GetMapping("/users")
-    public ResponseEntity<ApiResponse<Page<UserDTO>>> getAllUsers( @RequestParam(defaultValue = "0") int page,
-                                                                    @RequestParam(defaultValue = "10") int size){
-        Page<UserDTO> pagedUser = userService.getAllUsers(page, size);
-        ApiResponse<Page<UserDTO>> response = ApiResponse.success(pagedUser,null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
-        return ResponseEntity.ok(response);
-    }
+//    @Operation(
+//            summary = "Get All Users REST API",
+//            description = "Endpoint to get all users")
+//    @ApiResponses({
+//            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+//                    responseCode = "200",
+//                    description = "HTTP Status OK"
+//            ),
+//            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+//                    responseCode = "500",
+//                    description = "HTTP Status Internal Server Error",
+//                    content = @Content(
+//                            schema = @Schema(implementation = ErrorResponseDto.class)
+//                    )
+//            )
+//    })
+//    @GetMapping("/users")
+//    public ResponseEntity<ApiResponse<Page<UserDTO>>> getAllUsers( @RequestParam(defaultValue = "0") int page,
+//                                                                    @RequestParam(defaultValue = "10") int size){
+//        Page<UserDTO> pagedUser = userService.getAllUsers(page, size);
+//        ApiResponse<Page<UserDTO>> response = ApiResponse.success(pagedUser,null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
+//        return ResponseEntity.ok(response);
+//    }
 
     @Operation(
-            summary = "Get A User By Id REST API",
+            summary = "Get a user by Id REST API",
             description = "Endpoint to get a user")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(

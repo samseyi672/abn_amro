@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @ToString
 public class Role extends BaseEntity{
-    @Column(name="role")
+    @Column(name="rolename",unique = true)
     private String name;
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinTable(

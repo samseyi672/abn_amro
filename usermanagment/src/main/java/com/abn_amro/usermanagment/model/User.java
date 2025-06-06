@@ -13,15 +13,19 @@ import java.util.Set;
 @Data
 @ToString
 public class User extends BaseEntity {
-    @Column(unique = true)
-    private String username;
-    private String firstname ;
+    @Column(unique = true,name = "user_name")
+    private String userName;
+    @Column(name = "first_name")
+    private String firstName;
     @Column(name = "activation_token", unique = true)
     private String activationToken;
+    @Column(name = "last_name")
     private  String lastname ;
-    @Column(unique = true)
+    @Column(unique = true,name = "email")
     private String email;
+    @Column(name = "password")
     private String password; // encrypted
+    @Column(name = "enabled")
     private boolean enabled;
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
