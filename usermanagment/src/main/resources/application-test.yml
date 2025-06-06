@@ -1,9 +1,18 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 465
+#    port: 587
+    username: samseyi672@gmail.com
+    password: cxpgkwjpexctquha
+    smtp:
+      starttls:
+        enable: true
   mvc:
     pathmatch:
       matching-strategy: path_pattern_parser
   datasource:
-    url: jdbc:mysql://localhost:3306/users?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/usersdb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password: root
   jpa:
@@ -13,3 +22,12 @@ spring:
       mode: always
   config:
     import: "optional:configserver:http://localhost:8071/"
+api:
+  activationlink: http://localhost:3021/api/v1/user/registration
+#mail details
+com:
+  abnamro:
+    notify:
+      email_to_A: chaniya.mac.intosh@nl.abnamro.com
+      email_subject_A: Registration on Recipe Manager
+      email_to_C: chaniya.mac.intosh@nl.abnamro.com

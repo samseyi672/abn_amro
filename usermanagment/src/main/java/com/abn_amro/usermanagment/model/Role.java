@@ -15,20 +15,13 @@ import java.util.Set;
 public class Role extends BaseEntity{
     @Column(name="role")
     private String name;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "role_permissions",
-            joinColumns = @JoinColumn(name = "role_id",nullable = true),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private Set<Permission> permissions = new HashSet<>();
-
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(
+//            name = "role_permissions",
+//            joinColumns = @JoinColumn(name = "role_id",nullable = true),
+//            inverseJoinColumns = @JoinColumn(name = "permission_id")
+//    )
+//    private Set<Permission> permissions = new HashSet<>();
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<User> users = new HashSet<>();

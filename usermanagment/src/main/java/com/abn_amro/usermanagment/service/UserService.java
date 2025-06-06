@@ -2,14 +2,16 @@ package com.abn_amro.usermanagment.service;
 
 
 import com.abn_amro.usermanagment.dto.request.UserDTO;
+import com.abn_amro.usermanagment.model.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface UserService {
-    String createUser(UserDTO userDTO);
-    UserDTO getAllUsers();
+    void createUser(UserDTO userDTO);
+    Page<UserDTO> getAllUsers(int page , int size);
     UserDTO getUserById(Long id);
-    String deleteUserById(Long id);
-    List<UserDTO> searchUserByUserName(String usernme);
+    void deleteUserById(Long id);
+    Page<UserDTO> searchUserByUserName(String usernme,int page, int size,boolean isEnabled);
     boolean verifyUsername(String username);
 }

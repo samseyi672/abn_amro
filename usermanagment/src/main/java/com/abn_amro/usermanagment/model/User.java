@@ -15,6 +15,8 @@ import java.util.Set;
 public class User extends BaseEntity {
     @Column(unique = true)
     private String username;
+    private String firstname ;
+    private  String lastname ;
     @Column(unique = true)
     private String email;
     private String password; // encrypted
@@ -27,9 +29,6 @@ public class User extends BaseEntity {
     )
     private Set<Role> roles = new HashSet<>();
 }
-
-
-
 
 
 

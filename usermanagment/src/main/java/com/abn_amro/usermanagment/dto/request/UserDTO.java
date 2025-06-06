@@ -1,7 +1,5 @@
 package com.abn_amro.usermanagment.dto.request;
 
-
-import com.abn_amro.usermanagment.model.Permission;
 import com.abn_amro.usermanagment.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,6 +27,18 @@ public class UserDTO {
     @NotNull(message = "id cannot be null")
     private Long id;
     @Schema(
+            name = "firstname",
+            description = "firstname of the user"
+    )
+    @NotEmpty(message = "firstname cannot be empty")
+    private String firstname ;
+    @Schema(
+            name = "lastname",
+            description = "lastname of the user"
+    )
+    @NotEmpty(message = "lastname cannot be empty")
+    private  String lastname ;
+    @Schema(
             name = "username",
             description = "Unique username"
     )
@@ -36,7 +46,7 @@ public class UserDTO {
     private String username;
     @Schema(
             name = "email",
-            description = "Unique email"
+            description = "Unique email needed"
     )
     private String email;
     @Schema(
@@ -51,6 +61,12 @@ public class UserDTO {
             hidden = true
     )
     private boolean enabled; // this will be hidden by default
+
+    @Schema(
+            name = "roles",
+            description = "user roles"
+    )
+    private List<Role> roles ;
 }
 
 

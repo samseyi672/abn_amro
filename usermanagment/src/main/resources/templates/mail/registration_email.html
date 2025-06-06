@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Activate Your Recipe Manager Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 30px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        p {
+            font-size: 15px;
+            color: #333333;
+        }
+        a.button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer {
+            font-size: 13px;
+            color: #888888;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Hello {firstName} {lastName},</h2>
+    <p>Welcome to <strong>ABN Amro Recipe Manager</strong>! 🎉</p>
+    <p>To activate your account and get started, please click the button below:</p>
+    <p>
+        <a href="{activationLink}" class="button">Activate Account</a>
+    </p>
+    <p>If the button above doesn't work, copy and paste the following URL into your browser:</p>
+    <p>{activationLink}</p>
+    <p>If you didn’t sign up for Recipe Manager, you can ignore this email.</p>
+    <p>We’re excited to have you onboard. Let’s get cooking!</p>
+    <div class="footer">
+        &copy; <span data-th-text="${CurrentYear}">2025</span> Recipe Manager. All rights reserved.
+    </div>
+</div>
+</body>
+</html>
