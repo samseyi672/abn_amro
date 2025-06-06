@@ -16,6 +16,8 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String username;
     private String firstname ;
+    @Column(name = "activation_token", unique = true)
+    private String activationToken;
     private  String lastname ;
     @Column(unique = true)
     private String email;

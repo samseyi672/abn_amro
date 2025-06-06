@@ -13,7 +13,6 @@ import java.util.Optional;
 public interface UserRepositories extends JpaRepository<User,Long> {
     Page<User> findByUsernameContainingIgnoreCase(String keyword, Pageable pageable); //search all users
     Page<User> findByUsernameContainingIgnoreCaseAndEnabledTrue(String keyword, Pageable pageable);//for active users
-
     boolean existsByUsername(String username);
-
+    Optional<User> findByActivationToken(String token);
 }

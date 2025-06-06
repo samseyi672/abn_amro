@@ -1,6 +1,8 @@
 package com.abn_amro.usermanagment.dto.response;
 
 public class ResponseConstants {
+    public static final String ACCOUNT_IS_ACTIVE = "Your account is now active";
+
     private ResponseConstants(){}
     public static final String  SAVINGS = "User Saved";
     public static final String  ADDRESS = "123 Main Street, New York";

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -109,16 +110,23 @@ public class UserServiceImpl implements UserService {
         if (userDTO.getRoles() != null) {
             user.setRoles(new HashSet<>(userDTO.getRoles()));
         }
+        user.setEnabled(false);
+        user.setActivationToken(UUID.randomUUID().toString());
         User saved = userRepositories.save(user);
         UserDTO dto = userMapper.toDto(saved);
         dto.setPassword(null);
         return dto;
     }
 
-
-    @Override
-    public User activateRegistrationLinkByEmail(UserDTO userDTO) {
-        return null;
+    public void activateUserByToken(String token) {
+        User user = userRepositories.findByActivationToken(token)
+                .orElseThrow(() -> new UserNotFoundException("Invalid or expired activation token."));
+        if (user.isEnabled()) {
+            throw new IllegalStateException("User is already activated.");
+        }
+        user.setEnabled(true);
+        user.setActivationToken(null);
+        userRepositories.save(user);
     }
 }
 

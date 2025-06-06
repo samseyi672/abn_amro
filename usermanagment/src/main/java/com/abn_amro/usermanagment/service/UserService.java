@@ -15,5 +15,5 @@ public interface UserService {
     Page<UserDTO> searchUserByUserName(String usernme,int page, int size,boolean isEnabled);
     boolean verifyUsername(String username);
     UserDTO updateUser(Long id, UserDTO userDTO);
-    User activateRegistrationLinkByEmail(UserDTO userDTO);
+    void activateUserByToken(String token);
 }

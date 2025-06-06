@@ -222,6 +222,16 @@ public class UserController {
                 .body(response);
     }
 
+    @GetMapping("/activate")
+    public ResponseEntity<ApiResponse<String>> activateUser(@RequestParam String token) {
+        userService.activateUserByToken(token);
+        return ResponseEntity.ok(new ApiResponse<>(
+                 null,null,
+                ResponseConstants.MESSAGE_200,
+                ResponseConstants.ACCOUNT_IS_ACTIVE
+        ));
+    }
+
 }
 
 
