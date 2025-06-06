@@ -10,14 +10,19 @@ import lombok.NoArgsConstructor;
         description = "Schema to hold successful response information"
 )
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class ApiResponse<T> {
 
     @Schema(
             description = "Status code in the response"
     )
     private String statusCode;
+
+    @Schema(
+            description = "url in the response"
+    )
+    private String url;
 
     @Schema(
             description = "Status message in the response"
@@ -28,6 +33,21 @@ public class ApiResponse<T> {
             description = "Data in the response"
     )
     private T data ;
+
+    public ApiResponse(String statusCode, String url, String statusMsg, T data) {
+        this.statusCode = statusCode;
+        this.url = url;
+        this.statusMsg = statusMsg;
+        this.data = data;
+    }
+
+    public ApiResponse() {
+    }
+
+    public static <T> ApiResponse<T> success(T data, String url, String statusCode, String statusMsg) {
+        return new ApiResponse<>(statusCode,url,statusMsg,data);
+    }
+
 }
 
 

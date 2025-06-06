@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void createUser(UserDTO userDTO) {
+    public User createUser(UserDTO userDTO) {
        User user =  userMapper.toEntity(userDTO) ;
        log.info("user {}",user);
        User user1 = userRepositories.save(user);
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
                user1.getFirstname(),user1.getFirstname(),
                user1.getEmail());
        eventPublisherAware.publishEvent(event);
-      // return user;
+      return user;
     }
 
     @Override
@@ -94,6 +94,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean verifyUsername(String username) {
         return userRepositories.existsByUsername(username);
+    }
+
+    @Override
+    public User updateUser(UserDTO userDTO) {
+        return null;
+    }
+
+    @Override
+    public User activateRegistrationLinkByEmail(UserDTO userDTO) {
+        return null;
     }
 }
 
