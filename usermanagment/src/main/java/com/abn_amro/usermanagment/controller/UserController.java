@@ -188,6 +188,40 @@ public class UserController {
         ApiResponse<String> falseresponse = ApiResponse.success("user does not exists",null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
        return isUserExists?ResponseEntity.ok(response):ResponseEntity.ok(falseresponse);
     }
+
+
+    @Operation(
+            summary = "Update a user REST API",
+            description = "Endpoint to update a user")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "201",
+                    description = "HTTP Created"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<Long>> updateUser(
+            @PathVariable Long id,
+            @RequestBody @Valid UserDTO userDTO) {
+        UserDTO updatedUser = userService.updateUser(id, userDTO);
+        ApiResponse<Long> response = ApiResponse.success(updatedUser.getId(),"",ResponseConstants.STATUS_201,
+                ResponseConstants.MESSAGE_201);;
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(updatedUser.getId())
+                .toUri();
+        return ResponseEntity.created(location)
+                .body(response);
+    }
+
 }
 
 

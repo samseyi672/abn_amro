@@ -14,6 +14,6 @@ public interface UserService {
     void deleteUserById(Long id);
     Page<UserDTO> searchUserByUserName(String usernme,int page, int size,boolean isEnabled);
     boolean verifyUsername(String username);
-    User updateUser(UserDTO userDTO);
+    UserDTO updateUser(Long id, UserDTO userDTO);
     User activateRegistrationLinkByEmail(UserDTO userDTO);
 }

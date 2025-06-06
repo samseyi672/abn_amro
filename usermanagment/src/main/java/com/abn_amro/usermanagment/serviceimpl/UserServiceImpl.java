@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,10 +97,24 @@ public class UserServiceImpl implements UserService {
         return userRepositories.existsByUsername(username);
     }
 
-    @Override
-    public User updateUser(UserDTO userDTO) {
-        return null;
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        User user = userRepositories.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setEnabled(userDTO.isEnabled());
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
+            user.setPassword(userDTO.getPassword()); // Optional
+        }
+        if (userDTO.getRoles() != null) {
+            user.setRoles(new HashSet<>(userDTO.getRoles()));
+        }
+        User saved = userRepositories.save(user);
+        UserDTO dto = userMapper.toDto(saved);
+        dto.setPassword(null);
+        return dto;
     }
+
 
     @Override
     public User activateRegistrationLinkByEmail(UserDTO userDTO) {
