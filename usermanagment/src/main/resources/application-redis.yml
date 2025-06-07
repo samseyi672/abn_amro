@@ -6,7 +6,7 @@ spring:
         max-total: 16
         max-idle: 8
         min-idle: 4
-    host: 10.20.21.25
+    host: localhost
     port: 6379
     password: "Trust@@$$Banc_COOperate**#%%$$Group"
     timeout: 6000

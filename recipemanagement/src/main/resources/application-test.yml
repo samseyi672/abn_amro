@@ -1,4 +1,13 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    #    port: 587
+    username: samseyi672@gmail.com
+    password: cxpgkwjpexctquha
+    smtp:
+      starttls:
+        enable: true
   mvc:
     pathmatch:
       matching-strategy: path_pattern_parser
@@ -18,17 +27,112 @@ spring:
           page-parameter: page
           size-parameter: size
           default-page-size: 6
-  sql:
-    init:
-      schema-locations: classpath:schema.sql
-      mode: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/recipes_db
+    username: root
+    password: root
+    hikari:
+      poolName: stevicDbPool
+      maximumPoolSize: 2
+      connectionTestQuery: "SELECT 1"
+      idleTimeout: 30000
+      maxLifetime: 180000
+      validationTimeout: 5000
+    jpa:
+      database-platform: org.hibernate.dialect.MySQL8Dialect
+      show_sql: true
+      format_sql: true
+      hibernate:
+        ddl-auto: update
+      sql:
+        init:
+          mode: always
+    config:
+      import: "optional:configserver:http://localhost:8071/"
   r2dbc:
-    url: r2dbc:pool:mysql://localhost:3306/recipes_db
+    url: r2dbc:pool:mysql://localhost:3308/recipes_db
     pool:
       initial-size: 1
       max-size: 2
       max-idle-time: 5m
       validation-query: SELECT 1
-    username: stevic
-    password: 'password'
+    username: root
+    password: root
+#mail details
+com:
+  abnamro:
+    notify:
+      email_to_A: chaniya.mac.intosh@nl.abnamro.com
+      email_subject_A: Registration on Recipe Manager
+      email_to_C: chaniya.mac.intosh@nl.abnamro.com
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
+endpoints:
+  shutdown:
+    enabled: true
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceurl:
+      defaultZone: http://localhost:8761/eureka/
+#for description in the eureka microservice network.
+info:
+  app:
+    name: "usermanagement"
+    description: "user management"
+    version: "1.0.0"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @ToString
@@ -22,7 +23,6 @@ public class UserDTO {
             name = "id",
             description = "Only details required.pass zero if user is new"
     )
-    @NotNull(message = "id cannot be null")
     private Long id;
     @Schema(
             name = "firstname",
@@ -58,13 +58,19 @@ public class UserDTO {
             description = "users activation",
             hidden = true
     )
-    private boolean enabled; // this will be hidden by default
+    private boolean enabled;
 
     @Schema(
             name = "roles",
             description = "user roles"
     )
-    private List<Role> roles ;
+    private List<RoleDTO> roles;
+//    public List<RoleDTO> getRoles() {
+//        return this.roles;
+//    }
+//    public Long getId() {
+//        return id;
+//    }
 }
 
 

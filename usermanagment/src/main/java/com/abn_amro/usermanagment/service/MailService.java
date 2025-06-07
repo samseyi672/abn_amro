@@ -5,5 +5,5 @@ import com.abn_amro.usermanagment.exceptions.MailServerException;
 
 public interface MailService {
 void sendEmail(Mail mail) throws MailServerException;
-void sendEmailAsync(Mail mail);
+void sendEmailAsync(Mail mail) throws MailServerException;
 }

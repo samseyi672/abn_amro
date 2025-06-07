@@ -12,18 +12,31 @@ spring:
     pathmatch:
       matching-strategy: path_pattern_parser
   datasource:
-    url: jdbc:mysql://localhost:3306/usersdb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/users_db
+#      url: jdbc:mysql://localhost:3306/users_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password: root
+  hikari:
+    poolName: stevicDbPool
+    maximumPoolSize: 2
+    connectionTestQuery: "SELECT 1"
+    idleTimeout: 30000
+    maxLifetime: 180000
+    validationTimeout: 5000
   jpa:
-    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show_sql: true
+    format_sql: true
+    hibernate:
+      ddl-auto: update
   sql:
     init:
       mode: always
   config:
     import: "optional:configserver:http://localhost:8071/"
 api:
-  activationlink: http://localhost:3021/api/v1/user/registration
+  activationlink: http://localhost:8081/api/v1/user/activate
 #mail details
 com:
   abnamro:
@@ -31,3 +44,32 @@ com:
       email_to_A: chaniya.mac.intosh@nl.abnamro.com
       email_subject_A: Registration on Recipe Manager
       email_to_C: chaniya.mac.intosh@nl.abnamro.com
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true # for graceful shutdown in eureka
+  info:
+    env:
+      enabled: true
+endpoints:
+  shutdown:
+    enabled: true
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceurl:
+      defaultZone: http://localhost:8761/eureka/
+#for description in the eureka microservice network.
+info:
+  app:
+    name: "usermanagement"
+    description: "user management"
+    version: "1.0.0"

@@ -8,7 +8,10 @@ import com.abn_amro.usermanagment.event.UserRegisteredEvent;
 import com.abn_amro.usermanagment.exceptions.MailServerException;
 import com.abn_amro.usermanagment.service.MailService;
 import com.abn_amro.usermanagment.service.ThymeLeafContextService;
+import com.abn_amro.usermanagment.serviceimpl.MailServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
@@ -22,8 +25,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Component
-@Slf4j
 public class SendWelcomeEmailListener {
+    private final static Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
     private  final MailService mailService ;
     private final ResourceLoader resourceLoader;
     private final ClientConfigProperties clientConfigProperties;

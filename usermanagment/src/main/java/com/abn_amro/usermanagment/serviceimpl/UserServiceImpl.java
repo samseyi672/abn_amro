@@ -85,13 +85,13 @@ public class UserServiceImpl implements UserService {
 
         } else {
             users = isEnabled ?
-                    userRepositories.findByEnabledTrueAndUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstnameContainingIgnoreCase(
+                    userRepositories.findByEnabledTrueAndUserNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstNameContainingIgnoreCase(
                             userName != null ? userName : "",
                             email != null ? email : "",
                             firstName != null ? firstName : "",
                             pageable
                     ) :
-                    userRepositories.findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstnameContainingIgnoreCase(
+                    userRepositories.findByUserNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstNameContainingIgnoreCase(
                             userName != null ? userName : "",
                             email != null ? email : "",
                             firstName != null ? firstName : "",
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public boolean verifyUsername(String username) {
-        return userRepositories.existsByUsername(username);
+        return userRepositories.existsByUserName(username);
     }
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(userDTO.getPassword()); // Optional
         }
         if (userDTO.getRoles() != null) {
-            user.setRoles(new HashSet<>(userDTO.getRoles()));
+            user.setRoles(new HashSet<>(userMapper.mapRoleDtosToSet(userDTO.getRoles())));
         }
         user.setEnabled(false);
         user.setActivationToken(UUID.randomUUID().toString());

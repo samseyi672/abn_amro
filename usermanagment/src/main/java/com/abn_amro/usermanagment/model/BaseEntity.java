@@ -13,12 +13,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 
-@MappedSuperclass
 @Data
+@MappedSuperclass
 @EntityListeners(AuditListener.class)
-public class BaseEntity {
+public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @CreatedDate
     @Column(updatable = false)
@@ -35,6 +35,10 @@ public class BaseEntity {
     @LastModifiedBy
     @Column(insertable = false)
     private String updatedBy;
+
+    public Long getId() {
+        return id;
+    }
 }
 
 

@@ -9,4 +9,42 @@ import lombok.ToString;
 public class NameEmailDTO {
     private String name;
     private String email;
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -29,9 +29,9 @@ public class MailServiceImpl implements MailService {
     private final static Logger logger = LoggerFactory.getLogger(MailServiceImpl.class);
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
-    private final ExecutorService executorService;
     private final ObjectMapper mapper;
     private final MailConfigProperties mailConfigProperties;
+
     @Override
     public void sendEmail(Mail mail) throws MailServerException {
         if (!isValidEmail(mail.getMailTo())) {
@@ -70,14 +70,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendEmailAsync(Mail mail) {
-        executorService.submit(()-> {
-            try {
+    public void sendEmailAsync(Mail mail) throws MailServerException {
                 this.sendEmail(mail);
-            } catch (MailServerException e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
     private Stream<Attachment> mailAttachmentStream(List<Attachment> attachments){
         if(Objects.nonNull(attachments)){

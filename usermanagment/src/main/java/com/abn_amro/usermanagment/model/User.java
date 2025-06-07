@@ -13,14 +13,14 @@ import java.util.Set;
 @Data
 @ToString
 public class User extends BaseEntity {
-    @Column(unique = true,name = "user_name")
+    @Column(unique = true,name = "username")
     private String userName;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "activation_token", unique = true)
     private String activationToken;
     @Column(name = "last_name")
-    private  String lastname ;
+    private  String lastName;
     @Column(unique = true,name = "email")
     private String email;
     @Column(name = "password")
@@ -34,6 +34,9 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
 }
 
 

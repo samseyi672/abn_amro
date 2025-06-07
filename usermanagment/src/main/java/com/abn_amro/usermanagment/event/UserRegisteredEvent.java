@@ -15,4 +15,7 @@ public class UserRegisteredEvent {
     private String firstname ;
     private  String lastname ;
     private  String email;
+    public String getEmail(){
+        return email ;
+    }
 }

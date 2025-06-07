@@ -1,10 +1,13 @@
 package com.abn_amro.usermanagment.config;
 
 
+import com.abn_amro.usermanagment.serviceimpl.MailServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import java.util.Map;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -26,8 +29,9 @@ import java.util.*;
  */
 @Component
 @Aspect
-@Slf4j
 public class LogConfiguration {
+
+    private final static Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
     private final HttpServletRequest request;
     private final ObjectMapper objectMapper;
 
