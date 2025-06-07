@@ -50,15 +50,15 @@ spring:
           mode: always
     config:
       import: "optional:configserver:http://localhost:8071/"
-  r2dbc:
-    url: r2dbc:pool:mysql://localhost:3308/recipes_db
-    pool:
-      initial-size: 1
-      max-size: 2
-      max-idle-time: 5m
-      validation-query: SELECT 1
-    username: root
-    password: root
+#  r2dbc:
+#    url: r2dbc:pool:mysql://localhost:3308/recipes_db
+#    pool:
+#      initial-size: 1
+#      max-size: 2
+#      max-idle-time: 5m
+#      validation-query: SELECT 1
+#    username: root
+#    password: root
 #mail details
 com:
   abnamro:

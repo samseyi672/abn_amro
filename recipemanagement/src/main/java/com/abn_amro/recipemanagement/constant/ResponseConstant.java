@@ -3,7 +3,6 @@ package com.abn_amro.recipemanagement.constant;
 public class ResponseConstant {
     private ResponseConstant(){}
     public static final String  SAVINGS = "Recipe Saved";
-    public static final String  ADDRESS = "123 Main Street, New York";
     public static final String  STATUS_201 = "201";
     public static final String  MESSAGE_201 = "Recipe created successfully";
     public static final String  STATUS_200 = "200";
