@@ -1,20 +1,21 @@
 package com.abn_amro.recipemanagement.domain.entities;
 
 
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table("ingredients")
+@Table(name="ingredients")
+@Entity
 @Builder
 @Data
 public class Ingredient { //Linked to a specific recipe
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String quantity;
-    @Column("recipe_id")
+    @Column(name = "recipe_id")
     private Long recipeId;
 }

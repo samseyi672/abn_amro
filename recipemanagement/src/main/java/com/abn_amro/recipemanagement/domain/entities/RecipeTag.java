@@ -1,21 +1,23 @@
 package com.abn_amro.recipemanagement.domain.entities;
 
 
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table("recipe_tags")
+
+@Table(name = "recipe_tags")
+@Entity
 @Data
 @Builder
 public class RecipeTag {
    // RecipeTag handles Many-to-many relation between Recipes and Tags
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column("recipe_id")
+    @Column(name= "recipe_id")
     private Long recipeId;
-    @Column("tag_id")
+    @Column(name="tag_id")
     private Long tagId;
 }

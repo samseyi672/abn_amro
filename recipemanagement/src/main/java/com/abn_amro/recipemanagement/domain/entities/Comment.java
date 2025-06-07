@@ -1,21 +1,22 @@
 package com.abn_amro.recipemanagement.domain.entities;
 
 
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table("comments")
+@Table(name = "comments")
+@Entity
 @Builder
 @Data
 public class Comment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    @Column("user_id")
+    @Column(name = "user_id")
     private Long userId;
-    @Column("recipe_id")
+    @Column(name = "recipe_id")
     private Long recipeId;
 }
