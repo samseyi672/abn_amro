@@ -59,6 +59,7 @@ public class RecipeServiceImpl implements RecipeService {
             return ingredient ;
         }).collect(Collectors.toList());
         //ingredientRepository.saveAll(ingredients) ;
+        recipe.setIngredients(ingredients);
         Recipe createdRecipe = recipeRepository.save(recipe);
         log.info("created recipe "+createdRecipe);
         sendRecipeCreationEvent(user, recipe, ingredientDTO);
