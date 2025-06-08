@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Service Failure Alert</title>
+</head>
+<body>
+<h2>Microservice Alert</h2>
+<p>Dear IT,</p>
+<p>A failure occurred in the microservice at <strong th:text="${CurrentYear}"></strong>.</p>
+<p>Error Details: <strong th:text="${cause}"></strong></p>
+<p>Please investigate the issue.</p>
+</body>
+</html>

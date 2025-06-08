@@ -26,7 +26,7 @@ import java.util.Map;
 
 @Component
 public class SendWelcomeEmailListener {
-    private final static Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(SendWelcomeEmailListener.class);
     private  final MailService mailService ;
     private final ResourceLoader resourceLoader;
     private final ClientConfigProperties clientConfigProperties;

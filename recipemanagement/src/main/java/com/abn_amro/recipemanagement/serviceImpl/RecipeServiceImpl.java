@@ -1,6 +1,5 @@
 package com.abn_amro.recipemanagement.serviceImpl;
 
-import com.abn_amro.recipemanagement.constant.ResponseConstant;
 import com.abn_amro.recipemanagement.domain.dto.request.IngredientDTO;
 import com.abn_amro.recipemanagement.domain.dto.request.RecipeDTO;
 import com.abn_amro.recipemanagement.domain.dto.request.UserDTO;
@@ -16,7 +15,6 @@ import com.abn_amro.recipemanagement.repository.RecipeRepository;
 import com.abn_amro.recipemanagement.service.RecipeService;
 import com.abn_amro.recipemanagement.service.UserServiceClient;
 import com.abn_amro.recipemanagement.utils.RecipeSpecification;
-import io.r2dbc.spi.Row;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,10 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,9 +39,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final IngredientRepository ingredientRepository ;
     private final IngredientMapper ingredientMapper;
     private final UserServiceClient userServiceClient;
-
     private final ApplicationEventPublisher eventPublisher;
-
 
     @Override
     public RecipeDTO findById(Long id) {
@@ -98,8 +91,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Mono<Void> deleteById(Long id) {
-        return null;
+    public void deleteById(Long id) {
+        return ;
     }
 
     @Override

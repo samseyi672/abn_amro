@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
         description = "Schema to hold successful response information"
 )
 @Data
-//@AllArgsConstructor
-//@NoArgsConstructor
 public class ApiResponse<T> {
 
     @Schema(

@@ -15,8 +15,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -76,5 +78,9 @@ public class MailServiceImpl implements MailService {
             return attachments.stream();
         }
         return Stream.empty();
+    }
+    public String buildEmailBody(Map<String, Object> contextMap, String templateName) {
+        Context context = (Context) contextMap.get("emailContext");
+        return templateEngine.process(templateName, context);
     }
 }

@@ -67,6 +67,33 @@ com:
       email_subject_A: Registration on Recipe Manager
       email_to_C: chaniya.mac.intosh@nl.abnamro.com
 
+resilience4j:
+  circuitbreaker:
+    instances:
+      userServiceClient:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        registerHealthIndicator: true
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+  timelimiter:
+    instances:
+      userServiceClient:
+        timeoutDuration: 3s
+  retry:
+    instances:
+      userServiceClient:
+        maxAttempts: 3
+        waitDuration: 2s
+        retryExceptions:
+          - feign.RetryableException
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 3000
+
 management:
   endpoints:
     web:

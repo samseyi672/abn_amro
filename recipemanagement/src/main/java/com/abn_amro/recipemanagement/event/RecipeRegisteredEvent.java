@@ -5,11 +5,13 @@ import com.abn_amro.recipemanagement.domain.dto.request.IngredientDTO;
 import com.abn_amro.recipemanagement.domain.entities.Ingredient;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
 @Builder
+@ToString
 public class RecipeRegisteredEvent {
     private String lastName;
     private String firstName;
