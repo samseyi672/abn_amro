@@ -36,3 +36,12 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, JpaSpecif
     List<Recipe> findByVegetarianAndServings(boolean vegetarian, int servings);
 
 }
+
+
+
+
+
+
+
+
+

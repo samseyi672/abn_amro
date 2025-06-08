@@ -116,8 +116,7 @@ public class RecipeController {
             @RequestParam String ingredient,
             @RequestParam String instruction,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam boolean active) {
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page,size) ;
       Page<RecipeDTO> recipeDTOPage =   recipeService.searchRecipeWithDynamicFiltering(vegetarian,servings,
               ingredient,instruction,pageable);
@@ -148,8 +147,7 @@ public class RecipeController {
             @RequestParam String ingredient,
             @RequestParam String instruction,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam boolean active) {
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page,size) ;
         Page<RecipeDTO> recipeDTOPage =   recipeService.searchRecipeWithDynamicFilteringByUserId(userId,vegetarian,servings,
                 ingredient,instruction,pageable);

@@ -1,0 +1,166 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+  application:
+    name: recipemanager
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    #    port: 587
+    username: samseyi672@gmail.com
+    password: cxpgkwjpexctquha
+    smtp:
+      starttls:
+        enable: true
+  mvc:
+    pathmatch:
+      matching-strategy: path_pattern_parser
+    servlet:
+      multipart:
+        enabled: true
+        file-size-threshold: 100KB
+        max-file-size: 200MB
+        max-request-size: 200MB
+    http:
+      multipart:
+        max-file-size: 200MB
+        max-request-size: 200MB
+    data:
+      web:
+        pageable:
+          page-parameter: page
+          size-parameter: size
+          default-page-size: 6
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3309/test_db
+    username: root
+    password: root
+    hikari:
+      poolName: stevicDbPool
+      maximumPoolSize: 2
+      connectionTestQuery: "SELECT 1"
+      idleTimeout: 30000
+      maxLifetime: 180000
+      validationTimeout: 5000
+    jpa:
+      database-platform: org.hibernate.dialect.MySQL8Dialect
+      show_sql: true
+      format_sql: true
+      hibernate:
+        ddl-auto: update
+      sql:
+        init:
+          mode: always
+    config:
+      import: "optional:configserver:http://localhost:8071/"
+com:
+  abnamro:
+    notify:
+      email_to_A: chaniya.mac.intosh@nl.abnamro.com
+      email_subject_A: Registration on Recipe Manager
+      email_to_C: chaniya.mac.intosh@nl.abnamro.com
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      userServiceClient:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        registerHealthIndicator: true
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+  timelimiter:
+    instances:
+      userServiceClient:
+        timeoutDuration: 3s
+  retry:
+    instances:
+      userServiceClient:
+        maxAttempts: 3
+        waitDuration: 2s
+        retryExceptions:
+          - feign.RetryableException
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 3000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+  info:
+    env:
+      enabled: true
+endpoints:
+  shutdown:
+    enabled: true
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceurl:
+      defaultZone: http://localhost:8761/eureka/
+#for description in the eureka microservice network.
+info:
+  app:
+    name: "usermanagement"
+    description: "user management"
+    version: "1.0.0"
+
+logging:
+  level:
+    file:
+      name: C:\\logs\\recipes.log
+    root: INFO
+    org:
+      springframework:
+        web: DEBUG
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
