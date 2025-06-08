@@ -11,5 +11,6 @@ public interface RecipeService {
     Recipe createRecipe(RecipeDTO recipe);
     void deleteById(Long id);
     Page<RecipeDTO> searchRecipeWithDynamicFiltering(Boolean vegetarian, Integer servings, String ingredient, String instructionSearchText, Pageable pageable);
+    Page<RecipeDTO> searchRecipeWithDynamicFilteringByUserId(Long id,Boolean vegetarian, Integer servings, String ingredient, String instructionSearchText, Pageable pageable);
 }
 

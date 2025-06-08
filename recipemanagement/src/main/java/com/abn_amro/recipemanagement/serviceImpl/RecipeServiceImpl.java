@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,10 +48,10 @@ public class RecipeServiceImpl implements RecipeService {
                 .map(recipeMapper::toDto).orElseThrow(() -> new RecipeNotFoundEception("Recipe is not found"));
     }
 
-    public Page<RecipeDTO> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page,size) ;
-        return recipeRepository.findAll(pageable).map(recipeMapper::toDto) ;
-    }
+//    public Page<RecipeDTO> findAll(int page, int size) {
+//        Pageable pageable = PageRequest.of(page,size) ;
+//        return recipeRepository.findAll(pageable).map(recipeMapper::toDto) ;
+//    }
 
     @Override
     public Recipe createRecipe(RecipeDTO recipeDTO) {
@@ -102,6 +103,21 @@ public class RecipeServiceImpl implements RecipeService {
                 .and(RecipeSpecification.recipeHasIngredient(ingredient))
                 .and(RecipeSpecification.recipeContainsInstruction(instructionSearchText));
         return recipeRepository.findAll(spec, pageable).map(recipeMapper::toDto);
+    }
+
+
+    // for specific user
+    @Override
+    public Page<RecipeDTO> searchRecipeWithDynamicFilteringByUserId(Long id,Boolean vegetarian, Integer servings, String ingredient, String instructionSearchText, Pageable pageable) {
+        List<RecipeDTO> filteredList = this.searchRecipeWithDynamicFiltering(
+                        vegetarian, servings, ingredient, instructionSearchText, Pageable.unpaged())
+                .stream()
+                .filter(recipeDTO -> recipeDTO.getUserId().equals(id))
+                .collect(Collectors.toList());
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filteredList.size());
+        List<RecipeDTO> paged = filteredList.subList(start, end);
+        return new PageImpl<>(paged, pageable, filteredList.size());
     }
 }
 
