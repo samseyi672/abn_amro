@@ -49,10 +49,11 @@ public class RecipeControllerTest {
     @DisplayName("GET /api/v1/recipe/{id} - should return RecipeDTO")
     void testGetRecipeById() throws Exception {
         Mockito.when(recipeService.GetRecipeByRecipeId(eq(1L))).thenReturn(testRecipeDTO);
+
         mockMvc.perform(get("/api/v1/recipe/1"))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.statusCode").value(ResponseConstant.STATUS_200))
-                .andExpect((ResultMatcher) jsonPath("$.data.title").value("Test Recipe"));
+                .andExpect(jsonPath("$.statusCode").value(ResponseConstant.STATUS_200))
+                .andExpect(jsonPath("$.data.title").value("Test Recipe"));
     }
 
     @Test
