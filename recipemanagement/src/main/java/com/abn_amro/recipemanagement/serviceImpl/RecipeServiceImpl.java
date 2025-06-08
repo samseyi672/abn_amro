@@ -48,11 +48,6 @@ public class RecipeServiceImpl implements RecipeService {
                 .map(recipeMapper::toDto).orElseThrow(() -> new RecipeNotFoundEception("Recipe is not found"));
     }
 
-//    public Page<RecipeDTO> findAll(int page, int size) {
-//        Pageable pageable = PageRequest.of(page,size) ;
-//        return recipeRepository.findAll(pageable).map(recipeMapper::toDto) ;
-//    }
-
     @Override
     public Recipe createRecipe(RecipeDTO recipeDTO) {
         UserDTO user =callGetUserByUserIdService(recipeDTO);
@@ -104,7 +99,6 @@ public class RecipeServiceImpl implements RecipeService {
                 .and(RecipeSpecification.recipeContainsInstruction(instructionSearchText));
         return recipeRepository.findAll(spec, pageable).map(recipeMapper::toDto);
     }
-
 
     // for specific user
     @Override
