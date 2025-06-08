@@ -30,7 +30,7 @@ import java.net.URI;
 @Validated
 @LogRequestResponse(excludeFields = {"password"})
 @RequestMapping("/api/v1/user")
-@Tag(name = "User Management Controller", description = "User Management crud operations")
+@Tag(name = "User Management Controller", description = "User Management operations")
 @Slf4j
 public class UserController {
 
@@ -95,6 +95,7 @@ public class UserController {
                 .path("/{id}")
                 .buildAndExpand(user.getId())
                 .toUri();
+        response.setUrl(location.toString());
         return ResponseEntity.created(location)
                 .body(response);
     }
