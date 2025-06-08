@@ -34,13 +34,10 @@ import java.net.URI;
 @Tag(name = "Recipe Management Controller", description = "Recipe Management operations")
 @Slf4j
 public class RecipeController {
-
     private  final RecipeService recipeService ;
-
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
-
     @Operation(
             summary = "Create Recipe REST API",
             description = "Recipe creation endpoint")

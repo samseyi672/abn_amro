@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public class RecipeServiceImpl implements RecipeService {
                 .map(recipeMapper::toDto).orElseThrow(() -> new RecipeNotFoundEception("Recipe is not found"));
     }
 
+    @Transactional
     @Override
     public Recipe createRecipe(RecipeDTO recipeDTO) {
         UserDTO user =callGetUserByUserIdService(recipeDTO);
