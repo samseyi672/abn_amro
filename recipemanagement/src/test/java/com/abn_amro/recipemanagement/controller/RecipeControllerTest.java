@@ -19,10 +19,11 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 
 @WebMvcTest(RecipeController.class)
 public class RecipeControllerTest {
@@ -65,14 +66,17 @@ public class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("Test Recipe"));
     }
+
     @Test
     @DisplayName("POST /api/v1/recipe - should fail on validation")
     void testCreateRecipeValidationFailure() throws Exception {
         RecipeDTO invalidRecipe = RecipeDTO.builder().build(); // missing required fields
+
         mockMvc.perform(post("/api/v1/recipe/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRecipe)))
                 .andExpect(status().isBadRequest());
     }
+
 
 }
