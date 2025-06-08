@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 @Table(name = "recipes")
 @Entity
 @Builder
@@ -19,6 +21,8 @@ public class Recipe {
     private String instructions;
     @Column(name = "user_id")
     private Long userId;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Ingredient> ingredients;
 }
 
 

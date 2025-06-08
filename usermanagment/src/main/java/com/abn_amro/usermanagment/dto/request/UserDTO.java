@@ -65,12 +65,6 @@ public class UserDTO {
             description = "user roles"
     )
     private List<RoleDTO> roles;
-//    public List<RoleDTO> getRoles() {
-//        return this.roles;
-//    }
-//    public Long getId() {
-//        return id;
-//    }
 }
 
 

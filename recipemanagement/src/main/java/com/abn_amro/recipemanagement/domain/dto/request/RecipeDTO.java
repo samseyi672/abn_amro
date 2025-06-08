@@ -1,6 +1,7 @@
 package com.abn_amro.recipemanagement.domain.dto.request;
 
 
+import com.abn_amro.recipemanagement.domain.entities.Ingredient;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -45,6 +48,7 @@ public class RecipeDTO {
             description = "user id", example = "id of the user"
     )
     private Long userId;
+    private List<IngredientDTO> ingredients;
 }
 
 

@@ -99,30 +99,6 @@ public class UserController {
                 .body(response);
     }
 
-//    @Operation(
-//            summary = "Get All Users REST API",
-//            description = "Endpoint to get all users")
-//    @ApiResponses({
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-//                    responseCode = "200",
-//                    description = "HTTP Status OK"
-//            ),
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-//                    responseCode = "500",
-//                    description = "HTTP Status Internal Server Error",
-//                    content = @Content(
-//                            schema = @Schema(implementation = ErrorResponseDto.class)
-//                    )
-//            )
-//    })
-//    @GetMapping("/users")
-//    public ResponseEntity<ApiResponse<Page<UserDTO>>> getAllUsers( @RequestParam(defaultValue = "0") int page,
-//                                                                    @RequestParam(defaultValue = "10") int size){
-//        Page<UserDTO> pagedUser = userService.getAllUsers(page, size);
-//        ApiResponse<Page<UserDTO>> response = ApiResponse.success(pagedUser,null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
-//        return ResponseEntity.ok(response);
-//    }
-
     @Operation(
             summary = "Get a user by Id REST API",
             description = "Endpoint to get a user")

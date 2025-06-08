@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Created</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333;">
+    <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h2 style="color: #28a745;">Hi {{firstName}} {{lastName}},</h2>
+
+        <p>Your recipe <strong>"{{recipeTitle}}"</strong> has been successfully created!</p>
+
+        <p>
+            Here are the details:
+        </p>
+
+        <ul>
+            <li><strong>Vegetarian:</strong> {{vegetarian}}</li>
+            <li><strong>Servings:</strong> {{servings}}</li>
+            <li><strong>Created On:</strong> {{createdDate}}</li>
+        </ul>
+
+        <p>You can view or manage this recipe anytime in your dashboard.</p>
+
+        <p style="margin-top: 30px;">Thank you for sharing your creation with the world!</p>
+
+        <p style="color: #999;">– The ABN Recipe Manager Team</p>
+    </div>
+</body>
+</html>

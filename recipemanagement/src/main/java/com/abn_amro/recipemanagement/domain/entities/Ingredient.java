@@ -16,6 +16,7 @@ public class Ingredient { //Linked to a specific recipe
     private Long id;
     private String name;
     private String quantity;
-    @Column(name = "recipe_id")
-    private Long recipeId;
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 }

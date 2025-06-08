@@ -1,16 +1,15 @@
 package com.abn_amro.recipemanagement.service;
 
 import com.abn_amro.recipemanagement.domain.dto.request.RecipeDTO;
-import com.abn_amro.recipemanagement.domain.dto.response.ApiResponse;
-import org.springframework.http.ResponseEntity;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import com.abn_amro.recipemanagement.domain.entities.Recipe;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface RecipeService {
-    Mono<RecipeDTO> findById(Long id);
-    Flux<RecipeDTO> findAll();
-    Mono<ResponseEntity<ApiResponse<String>>> save(RecipeDTO recipe);
-    Mono<Void> deleteById(Long id);
+    RecipeDTO findById(Long id);
+    Recipe createRecipe(RecipeDTO recipe);
+    void deleteById(Long id);
+    Page<RecipeDTO> searchRecipeWithDynamicFiltering(Boolean vegetarian, Integer servings, String ingredient, String instructionSearchText, Pageable pageable);
 }
 
