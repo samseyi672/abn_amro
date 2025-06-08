@@ -43,7 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public RecipeDTO findById(Long id) {
+    public RecipeDTO GetRecipeByRecipeId(Long id) {
         return recipeRepository.findById(id)
                 .map(recipeMapper::toDto).orElseThrow(() -> new RecipeNotFoundEception("Recipe is not found"));
     }

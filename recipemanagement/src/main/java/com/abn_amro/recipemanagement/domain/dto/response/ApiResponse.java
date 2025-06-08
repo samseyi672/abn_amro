@@ -15,6 +15,7 @@ public class ApiResponse<T> {
     )
     private String statusCode;
 
+    private boolean hasError;
     @Schema(
             description = "url in the response"
     )
@@ -30,22 +31,23 @@ public class ApiResponse<T> {
     )
     private T data ;
 
-    public ApiResponse(String statusCode, String url, String statusMsg, T data) {
+    public ApiResponse(String statusCode, String url, String statusMsg, T data,boolean hasError) {
         this.statusCode = statusCode;
         this.url = url;
         this.statusMsg = statusMsg;
         this.data = data;
+        this.hasError=hasError;
     }
 
     public ApiResponse() {
     }
 
-    public static <T> ApiResponse<T> success(T data, String url, String statusCode, String statusMsg) {
-        return new ApiResponse<>(statusCode,url,statusMsg,data);
+    public static <T> ApiResponse<T> success(T data, String url, String statusCode, String statusMsg,boolean hasError) {
+        return new ApiResponse<>(statusCode,url,statusMsg,data,hasError);
     }
 
-    public static <T> ApiResponse<T> failure(T data, String url, String statusCode, String statusMsg) {
-        return new ApiResponse<>(statusCode,url,statusMsg,data);
+    public static <T> ApiResponse<T> failure(T data, String url, String statusCode, String statusMsg,boolean hasError) {
+        return new ApiResponse<>(statusCode,url,statusMsg,data,hasError);
     }
 }
 

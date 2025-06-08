@@ -46,7 +46,7 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserServiceCl
                         .enabled(false)
                         .build();
                 ApiResponse<UserDTO> response=
-                        ApiResponse.failure(fallbackUser,null, ResponseConstant.STATUS_503,ResponseConstant.MESSAGE_503);
+                        ApiResponse.failure(fallbackUser,null, ResponseConstant.STATUS_503,ResponseConstant.MESSAGE_503,true);
                 notifyByEmailAsync(id,cause);
                 return ResponseEntity.ok(response);
             }

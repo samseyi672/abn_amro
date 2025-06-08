@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 
 public interface RecipeService {
-    RecipeDTO findById(Long id);
+    RecipeDTO GetRecipeByRecipeId(Long id);
     Recipe createRecipe(RecipeDTO recipe);
     void deleteById(Long id);
     Page<RecipeDTO> searchRecipeWithDynamicFiltering(Boolean vegetarian, Integer servings, String ingredient, String instructionSearchText, Pageable pageable);

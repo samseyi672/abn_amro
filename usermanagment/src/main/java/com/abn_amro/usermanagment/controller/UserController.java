@@ -116,7 +116,7 @@ public class UserController {
                     )
             )
     })
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserDTO>> getUserById(@PathVariable(name = "id") @Pattern(regexp = "\\d++", message = "only int is expected") Long id){
       UserDTO userDTO =   userService.getUserById(id);
       ApiResponse<UserDTO> apiResponse = ApiResponse.success(userDTO,null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
@@ -139,7 +139,7 @@ public class UserController {
                     )
             )
     })
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteUserById(@PathVariable(name = "id") @Pattern(regexp = "\\d++", message = "only int is expected") Long id){
       userService.deleteUserById(id);
       ApiResponse<String> response = ApiResponse.success(null,null,ResponseConstants.STATUS_417,ResponseConstants.MESSAGE_417_DELETE);
