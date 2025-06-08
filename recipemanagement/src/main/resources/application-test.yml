@@ -1,5 +1,16 @@
 spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: UTC
+      default-property-inclusion: non_null
   mail:
+    properties:
+      mail:
+        smtp:
+          connectiontimeout: 5000
+          timeout: 5000
     host: smtp.gmail.com
     port: 465
     #    port: 587
@@ -45,20 +56,16 @@ spring:
       format_sql: true
       hibernate:
         ddl-auto: update
+        jdbc:
+          time_zone: UTC
+          open-in-view: false
+        generate_statistics: false
+
       sql:
         init:
           mode: always
     config:
       import: "optional:configserver:http://localhost:8071/"
-#  r2dbc:
-#    url: r2dbc:pool:mysql://localhost:3308/recipes_db
-#    pool:
-#      initial-size: 1
-#      max-size: 2
-#      max-idle-time: 5m
-#      validation-query: SELECT 1
-#    username: root
-#    password: root
 #mail details
 com:
   abnamro:
@@ -68,13 +75,22 @@ com:
       email_to_C: chaniya.mac.intosh@nl.abnamro.com
 
 resilience4j:
+  ratelimiter:
+    instances:
+      recipeApiLimiter:
+        limitForPeriod: 50
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0
+        registerHealthIndicator: true
   circuitbreaker:
     instances:
       userServiceClient:
         slidingWindowSize: 5
         failureRateThreshold: 50
+        minimumNumberOfCalls: 3
         waitDurationInOpenState: 10s
         registerHealthIndicator: true
+        permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
   timelimiter:
     instances:
@@ -95,11 +111,25 @@ feign:
         readTimeout: 3000
 
 management:
+  metrics:
+    tags:
+      application=${spring:
+        application:
+          name: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
   endpoints:
     web:
       exposure:
         include: "*"
   endpoint:
+    health:
+      show-details: always
+    circuitbreakers:
+      enabled: true
     shutdown:
       enabled: true
   info:
@@ -122,10 +152,6 @@ info:
     name: "usermanagement"
     description: "user management"
     version: "1.0.0"
-
-
-
-
 
 
 

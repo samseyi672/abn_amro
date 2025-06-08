@@ -8,6 +8,7 @@ import com.abn_amro.recipemanagement.domain.dto.response.ApiResponse;
 import com.abn_amro.recipemanagement.domain.entities.Recipe;
 import com.abn_amro.recipemanagement.exception.ErrorResponseDto;
 import com.abn_amro.recipemanagement.service.RecipeService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -55,6 +56,7 @@ public class RecipeController {
             )
     })
     @PostMapping("/")
+    @RateLimiter(name = "recipeApiLimiter")
     public ResponseEntity<ApiResponse<Long>> createRecipe(@Valid @RequestBody RecipeDTO recipeDTO) {
         Recipe recipe = recipeService.createRecipe(recipeDTO) ;
         ApiResponse<Long> response = ApiResponse.success(recipe.getId(),"", ResponseConstant.STATUS_201,
