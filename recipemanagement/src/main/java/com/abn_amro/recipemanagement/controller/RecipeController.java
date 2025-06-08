@@ -56,7 +56,7 @@ public class RecipeController {
             )
     })
     @PostMapping("/")
-    public ResponseEntity<ApiResponse<Long>> createUser(@Valid @RequestBody RecipeDTO recipeDTO) {
+    public ResponseEntity<ApiResponse<Long>> createRecipe(@Valid @RequestBody RecipeDTO recipeDTO) {
         Recipe recipe = recipeService.createRecipe(recipeDTO) ;
         ApiResponse<Long> response = ApiResponse.success(recipe.getId(),"", ResponseConstant.STATUS_201,
                 ResponseConstant.MESSAGE_201);;
@@ -69,6 +69,8 @@ public class RecipeController {
         return ResponseEntity.created(location)
                 .body(response);
       }
+
+
 }
 
 
