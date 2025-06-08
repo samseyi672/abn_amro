@@ -213,6 +213,10 @@ public class UserController {
         ));
     }
 
+    @GetMapping("/gatewayserver")
+    public ResponseEntity<String> testGateway(){
+        return ResponseEntity.ok("Api gateway is sending request");
+    }
 }
 
 

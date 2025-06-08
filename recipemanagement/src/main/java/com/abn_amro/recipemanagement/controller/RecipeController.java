@@ -153,6 +153,10 @@ public class RecipeController {
         return ResponseEntity.ok(ApiResponse.success(recipeDTOPage,null,ResponseConstant.STATUS_200,ResponseConstant.MESSAGE_200,false));
     }
 
+    @GetMapping("/gatewayserver")
+    public ResponseEntity<String> testGateway(){
+        return ResponseEntity.ok("Api gateway is sending request");
+    }
 
 }
 

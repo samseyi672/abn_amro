@@ -1,4 +1,4 @@
-package com.abn_amro.recipemanagement.config;
+package com.abn_amro.usermanagment.config;
 
 
 import org.springframework.cache.annotation.EnableCaching;
@@ -11,6 +11,7 @@ import java.time.Duration;
 
 @EnableCaching
 public class RedisCacheConfiguration {
+
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         org.springframework.data.redis.cache.RedisCacheConfiguration config = org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig()

@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 
 
 @Configuration
-public class RedisConfigurer {
+public class RedisConfiguration {
     @Value("${spring.redis.host}")
     private String host;
     @Value("${spring.redis.password}")

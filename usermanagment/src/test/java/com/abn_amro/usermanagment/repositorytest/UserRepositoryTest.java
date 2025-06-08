@@ -31,21 +31,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Slf4j
 public class UserRepositoryTest {
-
     @Autowired
    private UserRepositories userRepositories ;
-
     @Test
     void firstTest(){
         assertNotNull(userRepositories);
     }
-
     @Test
     @Sql("/testData.sql")
     void testData(){
 
     }
-
     @Test
     @DisplayName("Giving a searching by Username when email and firstname are null return List of users are")
     void  givenUserNameWhenEmailAndFirstNameIsNullAndEnabledTrueThenReturnPagedOfUsers(){
@@ -85,8 +81,6 @@ public class UserRepositoryTest {
                 Arguments.of(null, "seun@gmail.com", null),
                 Arguments.of(null,null,"adam"));
     }
-  //  boolean existsByUserName(String username);
-  //  Optional<User> findByActivationToken(String token);
       @ParameterizedTest
       @MethodSource("isUserExistsByUserName")
       @DisplayName("Check if a user exists by username")

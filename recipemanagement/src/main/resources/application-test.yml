@@ -60,10 +60,9 @@ spring:
           time_zone: UTC
           open-in-view: false
         generate_statistics: false
-
-      sql:
-        init:
-          mode: always
+#      sql:
+#        init:
+#          mode: always
     config:
       import: "optional:configserver:http://localhost:8071/"
 #mail details
@@ -113,7 +112,6 @@ feign:
 management:
   metrics:
     tags:
-      application=${spring:
         application:
           name: ${spring.application.name}
     distribution:
