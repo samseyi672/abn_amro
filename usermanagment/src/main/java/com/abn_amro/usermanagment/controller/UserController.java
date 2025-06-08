@@ -29,7 +29,7 @@ import java.net.URI;
 @RestController
 @Validated
 @LogRequestResponse(excludeFields = {"password"})
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1")
 @Tag(name = "User Management Controller", description = "User Management operations")
 @Slf4j
 public class UserController {
@@ -213,7 +213,7 @@ public class UserController {
         ));
     }
 
-    @GetMapping("/gatewayserver")
+    @GetMapping("/testserver")
     public ResponseEntity<String> testGateway(){
         return ResponseEntity.ok("Api gateway is sending request");
     }

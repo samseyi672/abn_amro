@@ -29,7 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/v1/recipe")
+@RequestMapping("/api/v1")
 @Validated
 @LogRequestResponse(excludeFields = {"password"})
 @Tag(name = "Recipe Management Controller", description = "Recipe Management operations")
