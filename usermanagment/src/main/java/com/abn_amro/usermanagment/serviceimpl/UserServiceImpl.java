@@ -6,8 +6,9 @@ import com.abn_amro.usermanagment.event.UserRegisteredEvent;
 import com.abn_amro.usermanagment.exceptions.UserNotFoundException;
 import com.abn_amro.usermanagment.mapper.UserMapper;
 import com.abn_amro.usermanagment.model.User;
-import com.abn_amro.usermanagment.repositories.UserRepositories;
+import com.abn_amro.usermanagment.repositories.UserRepository;
 import com.abn_amro.usermanagment.service.UserService;
+import com.abn_amro.usermanagment.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private UserRepositories userRepositories ;
+    private UserRepository userRepositories ;
     private UserMapper userMapper ;
     private ApplicationEventPublisher eventPublisherAware;
 
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(UserDTO userDTO) {
        User user =  userMapper.toEntity(userDTO) ;
+       user.setPassword(PasswordUtil.hashPassword(user.getPassword()));
        log.info("user {}",user);
        User user1 = userRepositories.save(user);
        user1.setPassword(null);

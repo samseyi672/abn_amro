@@ -34,7 +34,6 @@ public class ApiKeyAuthFilter extends AbstractGatewayFilterFactory<ApiKeyAuthFil
             if (isAnonymous) {
                 return chain.filter(exchange);
             }
-
             // Check API key
             String apiKey = request.getHeaders().getFirst(config.getApiKeyHeader());
             if (apiKey == null || !config.getAllowedKeys().contains(apiKey)) {

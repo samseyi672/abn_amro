@@ -1,7 +1,6 @@
 package com.abn_amro.usermanagment.repositories;
 
 
-import com.abn_amro.usermanagment.dto.request.UserDTO;
 import com.abn_amro.usermanagment.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepositories extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,Long> {
     Page<User> findByUserNameContainingIgnoreCase(String keyword, Pageable pageable); //search all users
     Page<User> findByUserNameContainingIgnoreCaseAndEnabledTrue(String keyword, Pageable pageable);//for active users
     boolean existsByUserName(String username);
@@ -32,4 +31,6 @@ public interface UserRepositories extends JpaRepository<User,Long> {
     Page<User> searchUser(@Param("keyword") String keyword, Pageable pageable);
 
     Page<User> findByUserNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstNameContainingIgnoreCase(String userName, String email, String firstName, Pageable pageable);
+
+    Optional<User> findByUserName(String username);
 }

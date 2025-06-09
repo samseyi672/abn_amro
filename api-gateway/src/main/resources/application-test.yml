@@ -36,11 +36,11 @@ spring:
               args:
                 name: accountsCircuitBreaker
                 fallbackUri: forward:/contactSupport
-            - name: ApiKeyAuth
+            - name: JwtAuthFilter
               args:
-                apiKeyHeader: X-API-KEY
-                allowedKeys: userservice123-key,admin123-key
+                signingKey: ${jwt.secret-key}
                 anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
+
         # Recipe service route
         - id: recipe-service
           uri: lb://RECIPE
@@ -63,6 +63,10 @@ spring:
                 apiKeyHeader: X-API-KEY
                 allowedKeys: recipe-service123-key,123admin-key
                 anonymousEndpoints: /abnamro/recipe/list,/abnamro/recipe/search
+            - name: JwtAuthFilter
+              args:
+                signingKey: ${jwt.secret-key}
+                anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
       locator:
         enabled: false
         lowerCaseServiceId: true
@@ -115,7 +119,10 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
-
+jwt:
+  secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+abCdEfGhIjKlMnOpQ="
+gateway:
+  hmac-secret: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+abCdEfGhIjKlMnOpQ==="
 
 
 

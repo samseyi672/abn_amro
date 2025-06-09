@@ -4,7 +4,7 @@ import com.abn_amro.usermanagment.dto.request.RoleDTO;
 import com.abn_amro.usermanagment.dto.request.UserDTO;
 import com.abn_amro.usermanagment.mapper.UserMapper;
 import com.abn_amro.usermanagment.model.User;
-import com.abn_amro.usermanagment.repositories.UserRepositories;
+import com.abn_amro.usermanagment.repositories.UserRepository;
 import com.abn_amro.usermanagment.serviceimpl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class UserServiceTest {
     private UserServiceImpl userService;
 
     @Mock
-    private UserRepositories userRepositories;
+    private UserRepository userRepositories;
 
     @Mock
     private UserMapper userMapper;

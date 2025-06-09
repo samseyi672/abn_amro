@@ -131,3 +131,6 @@ info:
     name: "usermanagement"
     description: "user management"
     version: "1.0.0"
+
+jwt:
+  secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+abCdEfGhIjKlMnOpQ="

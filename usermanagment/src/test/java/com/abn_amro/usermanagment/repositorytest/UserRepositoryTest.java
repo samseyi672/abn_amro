@@ -2,7 +2,7 @@ package com.abn_amro.usermanagment.repositorytest;
 
 
 import com.abn_amro.usermanagment.model.User;
-import com.abn_amro.usermanagment.repositories.UserRepositories;
+import com.abn_amro.usermanagment.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 public class UserRepositoryTest {
     @Autowired
-   private UserRepositories userRepositories ;
+   private UserRepository userRepositories ;
     @Test
     void firstTest(){
         assertNotNull(userRepositories);

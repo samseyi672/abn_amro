@@ -65,7 +65,7 @@ public class UserController {
             @RequestParam boolean active) {
         ApiResponse<Page<UserDTO>> pageApiResponse = ApiResponse.success(userService
                         .searchByUsernameOrEmailOrFirstName(userName,email,firstName, page, size,active),
-                null,ResponseConstants.STATUS_201,ResponseConstants.MESSAGE_201);
+                null,ResponseConstants.STATUS_201,ResponseConstants.MESSAGE_201,false);
         return ResponseEntity.ok(pageApiResponse);
     }
 
@@ -85,11 +85,11 @@ public class UserController {
                     )
             )
     })
-    @PostMapping("/")
-    public ResponseEntity<ApiResponse<Long>>  createUser(@Valid @RequestBody UserDTO userDTO){
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<Long>>  registerUser(@Valid @RequestBody UserDTO userDTO){
         User user = userService.createUser(userDTO);
         ApiResponse<Long> response = ApiResponse.success(user.getId(),"",ResponseConstants.STATUS_201,
-                ResponseConstants.MESSAGE_201);;
+                ResponseConstants.MESSAGE_201,false);;
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -119,7 +119,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserDTO>> getUserById(@PathVariable(name = "id") @Pattern(regexp = "\\d++", message = "only int is expected") Long id){
       UserDTO userDTO =   userService.getUserById(id);
-      ApiResponse<UserDTO> apiResponse = ApiResponse.success(userDTO,null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
+      ApiResponse<UserDTO> apiResponse = ApiResponse.success(userDTO,null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200,false);
       return ResponseEntity.ok(apiResponse);
     }
 
@@ -142,7 +142,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteUserById(@PathVariable(name = "id") @Pattern(regexp = "\\d++", message = "only int is expected") Long id){
       userService.deleteUserById(id);
-      ApiResponse<String> response = ApiResponse.success(null,null,ResponseConstants.STATUS_417,ResponseConstants.MESSAGE_417_DELETE);
+      ApiResponse<String> response = ApiResponse.success(null,null,ResponseConstants.STATUS_417,ResponseConstants.MESSAGE_417_DELETE,false);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 
@@ -165,8 +165,8 @@ public class UserController {
     @GetMapping("/is_user_exist/{id}")
     public ResponseEntity<ApiResponse<String>> verifyUsername(String username){
        boolean isUserExists  =  userService.verifyUsername(username) ;
-       ApiResponse<String> response = ApiResponse.success("user exists",null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
-        ApiResponse<String> falseresponse = ApiResponse.success("user does not exists",null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200);
+       ApiResponse<String> response = ApiResponse.success("user exists",null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200,false);
+        ApiResponse<String> falseresponse = ApiResponse.success("user does not exists",null,ResponseConstants.STATUS_200,ResponseConstants.MESSAGE_200,false);
        return isUserExists?ResponseEntity.ok(response):ResponseEntity.ok(falseresponse);
     }
 
@@ -193,7 +193,7 @@ public class UserController {
             @RequestBody @Valid UserDTO userDTO) {
         UserDTO updatedUser = userService.updateUser(id, userDTO);
         ApiResponse<Long> response = ApiResponse.success(updatedUser.getId(),"",ResponseConstants.STATUS_201,
-                ResponseConstants.MESSAGE_201);;
+                ResponseConstants.MESSAGE_201,false);;
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -209,7 +209,7 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse<>(
                  null,null,
                 ResponseConstants.MESSAGE_200,
-                ResponseConstants.ACCOUNT_IS_ACTIVE
+                ResponseConstants.ACCOUNT_IS_ACTIVE,false
         ));
     }
 
