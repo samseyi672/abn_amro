@@ -1,4 +1,7 @@
 spring:
+  config:
+    import-check.enabled: false
+    enabled: false
   application:
     name: "gatewayserver"
 #  config:
