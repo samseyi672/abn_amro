@@ -26,25 +26,6 @@ public class ApigatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApigatewayApplication.class, args);
 	}
-	@Bean
-	public RouteLocator eazyBankRouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
-		return routeLocatorBuilder.routes()
-				.route(p -> p
-						.path("/abnamro/user/**")
-						.filters( f -> f.rewritePath("/api/v1/user/(?<segment>.*)","/${segment}")
-								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-								.circuitBreaker(config -> config.setName("accountsCircuitBreaker")
-										.setFallbackUri("forward:/contactSupport")))
-						.uri("lb://USER"))
-				.route(p -> p
-						.path("/abnamro/recipe/**")
-						.filters( f -> f.rewritePath("/abnamro/recipe//(?<segment>.*)","/${segment}")
-								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-								.retry(retryConfig -> retryConfig.setRetries(3)
-										.setMethods(HttpMethod.GET)
-										.setBackoff(Duration.ofMillis(100),Duration.ofMillis(1000),2,true)))
-						.uri("lb://RECIPE")).build();
-	}
 
 	@Bean
 	public Customizer<ReactiveResilience4JCircuitBreakerFactory> defaultCustomizer() {

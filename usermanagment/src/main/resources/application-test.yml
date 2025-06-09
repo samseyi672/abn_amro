@@ -48,8 +48,8 @@ spring:
 #  sql:
 #    init:
 #      mode: always
-  config:
-    import: "optional:configserver:http://localhost:8071/"
+#  config:
+#    import: "optional:configserver:http://localhost:8071/"
 api:
   activationlink: http://localhost:8081/api/v1/user/activate
 #mail details

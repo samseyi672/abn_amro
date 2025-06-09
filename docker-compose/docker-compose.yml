@@ -296,20 +296,20 @@ volumes:
   userstestdb_data:
     driver: local
 
-  configserver:
-    image: "samseyi672/configserver:1"
-    container_name: configserver-ms
-    ports:
-      - "8071:8071"
-    healthcheck:
-      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-    extends:
-      file: common-config.yml
-      service: microservice-base-config
+  # configserver:
+  #   image: "samseyi672/configserver:1"
+  #   container_name: configserver-ms
+  #   ports:
+  #     - "8071:8071"
+  #   healthcheck:
+  #     test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 10
+  #     start_period: 10s
+  #   extends:
+  #     file: common-config.yml
+  #     service: microservice-base-config
 
   recipe:
     image: "samseyi672/recipemanager:1"
