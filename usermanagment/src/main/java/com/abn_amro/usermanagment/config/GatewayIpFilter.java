@@ -28,6 +28,7 @@ public class GatewayIpFilter extends OncePerRequestFilter {
             "/webjars/**",
             "/actuator/health",
             "/api/v1/user/testserver",
+            "/api/v1/user/register",
             "/swagger-resources/configuration/ui", "/swagger-resources/configuration/security",
             "/swagger-resources",
             "/configuration/ui",
@@ -75,9 +76,6 @@ public class GatewayIpFilter extends OncePerRequestFilter {
         log.info("request.getRemoteAddr() "+ request.getRemoteAddr());
         log.info("request properties {} {} {}"+ request.getRemoteHost(), request.getRemotePort(), request.getProtocol());
         String path = request.getRequestURI();
-        log.info("GatewayIpFilter path {} {} {} {}", request.getRemoteAddr(), request.getLocalAddr(),
-                request.getPathInfo(),
-                request.getContextPath());
         log.info("checking path {} {}",PUBLIC_PATHS.contains(path),path);
         if (isPublicPath(path)) {
             filterChain.doFilter(request, response);

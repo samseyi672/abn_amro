@@ -16,8 +16,8 @@ import java.util.List;
 public interface RecipeRepository extends JpaRepository<Recipe, Long>, JpaSpecificationExecutor<Recipe> {
     @Query("SELECT COUNT(r) FROM Recipe r WHERE r.userId = :userId")
     long countRecipeByUserId(@Param("userId") Long userId);
-    @Query("SELECT * FROM Recipe r WHERE r.userId = :userId")
-    Page<Recipe> selectRecipeByUserId(@Param("userId") Long userId, Pageable pageable);
+//    @Query("SELECT * FROM Recipe r WHERE r.userId = :userId")
+//    Page<Recipe> selectRecipeByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query("""
     SELECT r FROM Recipe r 

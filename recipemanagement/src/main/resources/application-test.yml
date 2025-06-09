@@ -1,10 +1,11 @@
 spring:
+  cloud:
+    config:
+      import-check.enabled: false
+      enabled: false
   jackson:
     serialization:
       write-dates-as-timestamps: false
-      date-format: yyyy-MM-dd HH:mm:ss
-      time-zone: UTC
-      default-property-inclusion: non_null
   mail:
     properties:
       mail:
@@ -40,11 +41,11 @@ spring:
           default-page-size: 6
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3308/recipes_db
+    url: jdbc:mysql://localhost:3307/recipe_db
     username: root
     password: root
     hikari:
-      poolName: stevicDbPool
+      poolName: abnPool
       maximumPoolSize: 2
       connectionTestQuery: "SELECT 1"
       idleTimeout: 30000
@@ -63,8 +64,8 @@ spring:
 #      sql:
 #        init:
 #          mode: always
-    config:
-      import: "optional:configserver:http://localhost:8071/"
+#    config:
+#      import: "optional:configserver:http://localhost:8071/"
 #mail details
 com:
   abnamro:
@@ -147,11 +148,12 @@ eureka:
 #for description in the eureka microservice network.
 info:
   app:
-    name: "usermanagement"
-    description: "user management"
+    name: "recipemanagement"
+    description: "recipe management for customers"
     version: "1.0.0"
 
-
+jwt:
+  secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+bbnnremwwqa+++212abCdEfGhIjKlMnOpQ="
 
 
 

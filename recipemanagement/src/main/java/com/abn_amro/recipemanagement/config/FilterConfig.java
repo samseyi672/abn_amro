@@ -5,16 +5,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 @Configuration
 public class FilterConfig {
 
     @Value("${security.gateway-ip}")
     private String gatewayIp;
-
     @Value("${jwt.secret-key}")
     private String secret;
-
     @Bean
     public FilterRegistrationBean<GatewayTrustFilter> gatewayTrustFilter() {
         FilterRegistrationBean<GatewayTrustFilter> registrationBean = new FilterRegistrationBean<>();

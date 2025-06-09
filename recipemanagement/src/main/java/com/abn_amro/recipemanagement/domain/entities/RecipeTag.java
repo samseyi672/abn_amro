@@ -2,15 +2,19 @@ package com.abn_amro.recipemanagement.domain.entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import lombok.NoArgsConstructor;
+
 
 
 @Table(name = "recipe_tags")
 @Entity
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RecipeTag {
    // RecipeTag handles Many-to-many relation between Recipes and Tags
     @Id

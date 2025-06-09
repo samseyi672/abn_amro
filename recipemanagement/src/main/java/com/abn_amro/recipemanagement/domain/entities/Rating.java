@@ -2,14 +2,18 @@ package com.abn_amro.recipemanagement.domain.entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import lombok.NoArgsConstructor;
+
 
 @Table(name = "ratings")
 @Entity
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Rating {
    // 1–5 stars, tied to a user and a recipe
    @Id

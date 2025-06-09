@@ -30,7 +30,7 @@ spring:
     username: root
     password: root
   hikari:
-    poolName: stevicDbPool
+    poolName:  abnDbPool
     maximumPoolSize: 2
     connectionTestQuery: "SELECT 1"
     idleTimeout: 30000

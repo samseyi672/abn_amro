@@ -23,7 +23,6 @@ public class GatewayIpFilter extends OncePerRequestFilter {
             "/swagger-resources/**",
             "/webjars/**",
             "/actuator/health",
-            "/api/v1/user/testserver",
             "/swagger-resources/configuration/ui", "/swagger-resources/configuration/security",
             "/swagger-resources",
             "/configuration/ui",
