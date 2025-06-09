@@ -12,7 +12,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.AntPathMatcher;
 import java.util.Arrays;
 
-@Component
+@Component("ApiKeyAuth")
 public class ApiKeyAuthFilter extends AbstractGatewayFilterFactory<ApiKeyAuthFilter.Config> {
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();

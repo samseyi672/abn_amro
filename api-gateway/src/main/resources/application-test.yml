@@ -1,75 +1,78 @@
 spring:
-  config:
-    import-check.enabled: false
-    enabled: false
   application:
     name: "gatewayserver"
 #  config:
 #    import: "optional:configserver:http://localhost:8071/"
   cloud:
-    gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-            allowedHeaders: "*"
-      routes:
-        - id: swagger-ui
-          uri: http://localhost:${server.port}
-          predicates:
-            - Path=/swagger-ui/**,/v3/api-docs/**,/swagger-resources/**,/webjars/**
-          filters:
-            - name: ApiKeyAuth
-              args:
-                anonymousEndpoints: "/**"
-        # User service route
-        - id: user-service
-          uri: lb://USER
-          predicates:
-            - Path=/abnamro/user/**
-          filters:
-#            - RewritePath=/api/v1/user/(?<segment>.*), /${segment}
-            - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
-            - name: CircuitBreaker
-              args:
-                name: accountsCircuitBreaker
-                fallbackUri: forward:/contactSupport
-            - name: JwtAuthFilter
-              args:
-                signingKey: ${jwt.secret-key}
-                anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
-
-        # Recipe service route
-        - id: recipe-service
-          uri: lb://RECIPE
-          predicates:
-            - Path=/abnamro/recipe/**
-          filters:
-#            - RewritePath=/abnamro/recipe/(?<segment>.*), /${segment}
-            - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
-            - name: Retry
-              args:
-                retries: 3
-                methods: GET
-                backoff:
-                  firstBackoff: 100ms
-                  maxBackoff: 1000ms
-                  factor: 2
-                  basedOnPreviousValue: true
-            - name: ApiKeyAuth
-              args:
-                apiKeyHeader: X-API-KEY
-                allowedKeys: recipe-service123-key,123admin-key
-                anonymousEndpoints: /abnamro/recipe/list,/abnamro/recipe/search
-            - name: JwtAuthFilter
-              args:
-                signingKey: ${jwt.secret-key}
-                anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
+    config:
+      import-check.enabled: false
+      enabled: false
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                allowedHeaders: "*"
+          httpclient:
+            connect-timeout: 1000
+            response-timeout: 10s
+          routes:
+            - id: swagger-ui
+              uri: http://localhost:${server.port}
+              predicates:
+                - Path=/swagger-ui/**,/v3/api-docs/**,/swagger-resources/**,/webjars/**
+              filters:
+                - name: ApiKeyAuth
+                  args:
+                    anonymousEndpoints: "/**"
+            # User service route
+            - id: user-service
+              uri: lb://USER
+              predicates:
+                - Path=/abnamro/user/**
+              filters:
+    #            - RewritePath=/api/v1/user/(?<segment>.*), /${segment}
+                - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
+                - name: CircuitBreaker
+                  args:
+                    name: accountsCircuitBreaker
+                    fallbackUri: forward:/contactSupport
+                - name: JwtAuthFilter
+                  args:
+                    signingKey: ${jwt.secret-key}
+                    anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
+            # Recipe service route
+            - id: recipe-service
+              uri: lb://RECIPE
+              predicates:
+                - Path=/abnamro/recipe/**
+              filters:
+    #            - RewritePath=/abnamro/recipe/(?<segment>.*), /${segment}
+                - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
+                - name: Retry
+                  args:
+                    retries: 3
+                    methods: GET
+                    backoff:
+                      firstBackoff: 100ms
+                      maxBackoff: 1000ms
+                      factor: 2
+                      basedOnPreviousValue: true
+                - name: ApiKeyAuth
+                  args:
+                    apiKeyHeader: X-API-KEY
+                    allowedKeys: recipe-service123-key,123admin-key
+                    anonymousEndpoints: /abnamro/recipe/list,/abnamro/recipe/search
+                - name: JwtAuthFilter
+                  args:
+                    signingKey: ${jwt.secret-key}
+                    anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
       locator:
         enabled: false
         lowerCaseServiceId: true
