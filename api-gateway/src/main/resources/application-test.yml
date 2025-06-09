@@ -46,12 +46,12 @@ spring:
                 - name: JwtAuthFilter
                   args:
                     signingKey: ${jwt.secret-key}
-                    anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
+                    anonymousEndpoints: /api/v1/user/login,/api/v1/user/health,/api/v1/user/testserver,/api/v1/user/testserver,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
             # Recipe service route
             - id: recipe-service
               uri: lb://RECIPE
               predicates:
-                - Path=/api/v1/recipe/**
+                - Path=/api/v1/recipe/**,/api/v1/comment/**,/api/v1/recipetag/**,/api/v1/tag/**
               filters:
     #            - RewritePath=/abnamro/recipe/(?<segment>.*), /${segment}
                 - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
@@ -72,7 +72,7 @@ spring:
                 - name: JwtAuthFilter
                   args:
                     signingKey: ${jwt.secret-key}
-                    anonymousEndpoints: /abnamro/user/public/**,/abnamro/user/health
+                    anonymousEndpoints: /api/v1/user/health,/api/v1/user/testserver,/api/v1/user/testserver,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
       locator:
         enabled: false
         lowerCaseServiceId: true
@@ -126,7 +126,7 @@ resilience4j.circuitbreaker:
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
 jwt:
-  secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+abCdEfGhIjKlMnOpQ="
+  secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+bbnnremwwqa+++212abCdEfGhIjKlMnOpQ="
 gateway:
   hmac-secret: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+abCdEfGhIjKlMnOpQ==="
 
@@ -136,8 +136,6 @@ eureka:
     prefer-ip-address: true
 server:
   port: 8080
-
-
 
 
 

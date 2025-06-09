@@ -20,7 +20,7 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
 
-@Component
+@Component("JwtAuthFilter")
 @Slf4j
 public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Config> {
 
@@ -55,7 +55,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
         return (exchange, chain) -> {
             String token = extractToken(exchange.getRequest().getHeaders().getFirst("Authorization"));
             String path = exchange.getRequest().getPath().toString();
-            log.info("Request path: " + path); // For debugging
+            log.info("Request path in apigateway: " + path); // For debugging
             if (!StringUtils.hasText(token)) {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();

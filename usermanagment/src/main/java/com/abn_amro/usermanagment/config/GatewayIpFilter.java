@@ -22,10 +22,26 @@ public class GatewayIpFilter extends OncePerRequestFilter {
 
     private static final List<String> PUBLIC_PATHS = List.of(
             "/swagger-ui.html",
+            "/swagger-ui/index.html",
             "/v3/api-docs",
             "/swagger-resources/**",
             "/webjars/**",
-            "/actuator/health"
+            "/actuator/health",
+            "/api/v1/user/testserver",
+            "/swagger-resources/configuration/ui", "/swagger-resources/configuration/security",
+            "/swagger-resources",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/security",
+            "/favicon.ico",
+            "/swagger-ui/*",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/v2/api-docs",
+            "/v3/api-docs/**",
+            "/v3/api-docs",
+            "/v2/api-docs/**"
+
     );
     private final String gatewayIp;
 
@@ -45,14 +61,24 @@ public class GatewayIpFilter extends OncePerRequestFilter {
         String forwardedFor = request.getHeader("X-Forwarded-For");
         String sourceIp = (forwardedFor != null) ? forwardedFor.split(",")[0].trim() : request.getRemoteAddr();
         log.info("sourceIp "+sourceIp);
+        log.info("request.getRemoteAddr() "+request.getRemoteAddr());
+        log.info("request properties {} {} {}"+request.getRemoteHost(),request.getRemotePort(),request.getProtocol());
+        String path = request.getRequestURI();
+        log.info("GatewayIpFilter path {} {} {} {}",request.getRemoteAddr(),request.getLocalAddr(),
+                request.getPathInfo(),
+                request.getContextPath());
+        log.info("checking path {} {}",PUBLIC_PATHS.contains(path),path);
+        if (isPublicPath(path)) {
+            filterChain.doFilter(request,response);
+            return;
+        }
+//        if (PUBLIC_PATHS.contains(path)) {
+//            filterChain.doFilter(request,response);
+//            return;
+//        }
         if (!gatewayIp.equals(sourceIp)) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.getWriter().write("Access denied: Go through the API Gateway");
-            return;
-        }
-        String path = request.getRequestURI();
-        if (isPublicPath(path)) {
-            filterChain.doFilter(request,response);
             return;
         }
         List<String> userRoles = getRolesFromHeader(request);

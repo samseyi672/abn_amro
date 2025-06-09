@@ -1,6 +1,7 @@
 package com.abn_amro.apigateway.config;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import org.springframework.util.AntPathMatcher;
 import java.util.Arrays;
 
 @Component("ApiKeyAuth")
+@Slf4j
 public class ApiKeyAuthFilter extends AbstractGatewayFilterFactory<ApiKeyAuthFilter.Config> {
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();

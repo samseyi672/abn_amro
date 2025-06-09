@@ -1,10 +1,11 @@
 spring:
+  cloud:
+    config:
+      import-check.enabled: false
+      enabled: false
   jackson:
     serialization:
-      write-dates-as-timestamps: false
-      date-format: yyyy-MM-dd HH:mm:ss
-      time-zone: UTC
-      default-property-inclusion: non_null
+      WRITE_DATES_AS_TIMESTAMPS: false
   mail:
     properties:
       mail:
@@ -104,6 +105,11 @@ management:
         http:
           server:
             requests: true
+sprindoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
   endpoints:
     web:
       exposure:
@@ -133,4 +139,4 @@ info:
     version: "1.0.0"
 
 jwt:
-  secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+abCdEfGhIjKlMnOpQ="
+  secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+bbnnremwwqa+++212abCdEfGhIjKlMnOpQ="

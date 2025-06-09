@@ -3,9 +3,16 @@ package com.abn_amro.usermanagment.config;
 
 import com.abn_amro.usermanagment.model.User;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.time.Instant;
@@ -14,16 +21,39 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-@Service
+@Component
+@Slf4j
+//@RequiredArgsConstructor
 public class TokenService {
-    private final Key jwtSecretKey;
 
-    public TokenService(@Value("${jwt.secret-key}") String secret) {
+    @Value("${jwt.secret-key}")
+    private String secret;
+    private Key jwtSecretKey;
+
+//    public TokenService() {
+//        log.info("secret "+secret);
+//        this.jwtSecretKey = new SecretKeySpec(
+//                Base64.getDecoder().decode(secret),
+//                "HmacSHA256"
+//        );
+//    }
+
+//    @Getter
+//    private SecretKey key;
+
+    @PostConstruct
+    public void init() {
+       // this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        log.info("secret "+secret);
         this.jwtSecretKey = new SecretKeySpec(
                 Base64.getDecoder().decode(secret),
                 "HmacSHA256"
         );
     }
+
+//    public SignatureAlgorithm getSignatureAlgorithm() {
+//        return SignatureAlgorithm.HS256;
+//    }
 
     public String generateToken(User user) {
         return Jwts.builder()
@@ -36,3 +66,47 @@ public class TokenService {
                 .compact();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
