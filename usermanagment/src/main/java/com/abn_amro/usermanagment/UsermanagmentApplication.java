@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableFeignClients
-//@EnableDiscoveryClient
+@EnableDiscoveryClient
 @OpenAPIDefinition(
 		info = @Info(
 				title = "User Management REST API Documentation",

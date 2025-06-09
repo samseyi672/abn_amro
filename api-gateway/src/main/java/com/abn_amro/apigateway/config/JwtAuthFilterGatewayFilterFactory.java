@@ -11,7 +11,6 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import reactor.core.publisher.Mono;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -22,7 +21,7 @@ import java.util.List;
 
 @Component("JwtAuthFilter")
 @Slf4j
-public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Config> {
+public class JwtAuthFilterGatewayFilterFactory extends AbstractGatewayFilterFactory<JwtAuthFilterGatewayFilterFactory.Config> {
 
     @Value("${gateway.hmac-secret}")
     private String gatewaySecret;
@@ -46,7 +45,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
         }
     }
 
-    public JwtAuthFilter() {
+    public JwtAuthFilterGatewayFilterFactory() {
         super(Config.class);
     }
 

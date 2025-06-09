@@ -15,11 +15,11 @@ import java.util.Arrays;
 
 @Component("ApiKeyAuth")
 @Slf4j
-public class ApiKeyAuthFilter extends AbstractGatewayFilterFactory<ApiKeyAuthFilter.Config> {
+public class ApiKeyAuthGatewayFilterFactory extends AbstractGatewayFilterFactory<ApiKeyAuthGatewayFilterFactory.Config> {
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-    public ApiKeyAuthFilter() {
+    public ApiKeyAuthGatewayFilterFactory() {
         super(Config.class);
     }
 

@@ -1,94 +1,88 @@
 spring:
   application:
     name: "gatewayserver"
-#  config:
-#    import: "optional:configserver:http://localhost:8071/"
   cloud:
     config:
-      import-check.enabled: false
       enabled: false
-      server:
-        webflux:
-          globalcors:
-            cors-configurations:
-              '[/**]':
-                allowedOrigins: "*"
-                allowedMethods:
-                  - GET
-                  - POST
-                  - PUT
-                  - DELETE
-                allowedHeaders: "*"
-          httpclient:
-            connect-timeout: 1000
-            response-timeout: 10s
-          routes:
-            - id: swagger-ui
-              uri: http://localhost:${server.port}
-              predicates:
-                - Path=/swagger-ui/**,/v3/api-docs/**,/swagger-resources/**,/webjars/**
-              filters:
-                - name: ApiKeyAuth
-                  args:
-                    anonymousEndpoints: "/**"
-            # User service route
-            - id: user-service
-              uri: lb://USER
-              predicates:
-                - Path=/api/v1/user/**
-              filters:
-    #            - RewritePath=/api/v1/user/(?<segment>.*), /${segment}
-                - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
-                - name: CircuitBreaker
-                  args:
-                    name: accountsCircuitBreaker
-                    fallbackUri: forward:/contactSupport
-                - name: JwtAuthFilter
-                  args:
-                    signingKey: ${jwt.secret-key}
-                    anonymousEndpoints: /api/v1/user/login,/api/v1/user/health,/api/v1/user/testserver,/api/v1/user/testserver,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
-            # Recipe service route
-            - id: recipe-service
-              uri: lb://RECIPE
-              predicates:
-                - Path=/api/v1/recipe/**,/api/v1/comment/**,/api/v1/recipetag/**,/api/v1/tag/**
-              filters:
-    #            - RewritePath=/abnamro/recipe/(?<segment>.*), /${segment}
-                - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
-                - name: Retry
-                  args:
-                    retries: 3
-                    methods: GET
-                    backoff:
-                      firstBackoff: 100ms
-                      maxBackoff: 1000ms
-                      factor: 2
-                      basedOnPreviousValue: true
-                - name: ApiKeyAuth
-                  args:
-                    apiKeyHeader: X-API-KEY
-                    allowedKeys: recipe-service123-key,123admin-key
-                    anonymousEndpoints: /abnamro/recipe/list,/abnamro/recipe/search
-                - name: JwtAuthFilter
-                  args:
-                    signingKey: ${jwt.secret-key}
-                    anonymousEndpoints: /api/v1/user/health,/api/v1/user/testserver,/api/v1/user/testserver,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
-      locator:
+      import-check:
         enabled: false
-        lowerCaseServiceId: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
       httpclient:
         connect-timeout: 1000
         response-timeout: 10s
+      routes:
+        - id: swagger-ui
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/swagger-ui/**,/v3/api-docs/**,/swagger-resources/**,/webjars/**
+          filters:
+            - name: ApiKeyAuth
+              args:
+                anonymousEndpoints: "/**"
+        - id: user-service
+          uri: lb://USER
+          predicates:
+            - Path=/api/v1/user/**
+          filters:
+            - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
+            - name: CircuitBreaker
+              args:
+                name: userCircuitBreaker
+                fallbackUri: forward:/contactSupport
+            - name: JwtAuthFilter
+              args:
+                signingKey: ${jwt.secret-key}
+                anonymousEndpoints: /api/v1/user/login,/api/v1/user/health,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
+        - id: recipe-service
+          uri: lb://RECIPE
+          predicates:
+            - Path=/api/v1/recipe/**,/api/v1/comment/**,/api/v1/recipetag/**,/api/v1/tag/**
+          filters:
+            - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
+            - name: Retry
+              args:
+                retries: 3
+                methods: GET
+                backoff:
+                  firstBackoff: 100ms
+                  maxBackoff: 1000ms
+                  factor: 2
+                  basedOnPreviousValue: true
+            - name: ApiKeyAuth
+              args:
+                apiKeyHeader: X-API-KEY
+                allowedKeys: recipe-service123-key,123admin-key
+                anonymousEndpoints: /api/v1/recipe/list,/api/v1/recipe/search
+            - name: JwtAuthFilter
+              args:
+                signingKey: ${jwt.secret-key}
+                anonymousEndpoints: /api/v1/user/health,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
     discovery:
       client:
         health-indicator:
           enabled: false
+
   data:
     redis:
-      connect-timeout: 2s
       host: localhost
       port: 6379
+      connect-timeout: 2s
       timeout: 1s
+
 management:
   endpoints:
     web:
@@ -104,27 +98,21 @@ management:
     tags:
       application: ${spring.application.name}
 
-info:
-  app:
-    name: "gatewayserver"
-    description: "ABN AMRO Gateway Server Application"
-    version: "1.0.0"
-
 logging:
   level:
-    com:
-      eazybytes:
-        gatewayserver: DEBUG
+    com.abn_amro.gatewayserver: DEBUG
   pattern:
     level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      slidingWindowSize: 10
-      permittedNumberOfCallsInHalfOpenState: 2
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 2
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+
 jwt:
   secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+bbnnremwwqa+++212abCdEfGhIjKlMnOpQ="
 gateway:
@@ -132,53 +120,9 @@ gateway:
 
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${random.value}
+    hostname: localhost
+    #    instance-id: ${spring.application.name}:${random.value}
     prefer-ip-address: true
+
 server:
   port: 8080
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

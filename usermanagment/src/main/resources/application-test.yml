@@ -125,6 +125,7 @@ endpoints:
     enabled: true
 eureka:
   instance:
+    hostname: localhost
     preferIpAddress: true
   client:
     fetchRegistry: true
