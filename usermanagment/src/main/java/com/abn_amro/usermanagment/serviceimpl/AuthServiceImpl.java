@@ -42,6 +42,10 @@ public class AuthServiceImpl implements AuthService {
         if (!PasswordUtil.verifyPassword(loginRequest.getPassword(), user.getPassword())) {
             throw new AuthenticationException("Invalid username or password");
         }
+        //check if user is active
+        if(!user.isEnabled()){
+            throw new AuthenticationException("Your account is inactive.Please contact the admin");
+        }
         String token = tokenService.generateToken(user);
         return new TokenResponse(token,Instant.now().plus(1, ChronoUnit.HOURS).toString());
     }

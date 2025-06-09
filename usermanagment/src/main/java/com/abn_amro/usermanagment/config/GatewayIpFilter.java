@@ -20,6 +20,13 @@ import java.util.regex.Pattern;
 public class GatewayIpFilter extends OncePerRequestFilter {
 
 
+    private static final List<String> PUBLIC_PATHS = List.of(
+            "/swagger-ui.html",
+            "/v3/api-docs",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/actuator/health"
+    );
     private final String gatewayIp;
 
     public GatewayIpFilter(String gatewayIp) {
@@ -40,10 +47,14 @@ public class GatewayIpFilter extends OncePerRequestFilter {
         log.info("sourceIp "+sourceIp);
         if (!gatewayIp.equals(sourceIp)) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.getWriter().write("Access denied: Requests must go through the API Gateway");
+            response.getWriter().write("Access denied: Go through the API Gateway");
             return;
         }
         String path = request.getRequestURI();
+        if (isPublicPath(path)) {
+            filterChain.doFilter(request,response);
+            return;
+        }
         List<String> userRoles = getRolesFromHeader(request);
         // Find first matching path rule
         Optional<Map.Entry<Pattern, List<String>>> matchedRule = PATH_ROLES.entrySet()
@@ -56,7 +67,7 @@ public class GatewayIpFilter extends OncePerRequestFilter {
             ((HttpServletResponse) request).sendError(403, "FORBIDDEN");
             return;
         }
-      //  response.setHeader("Access-Control-Allow-Origin", "*");
+       response.setHeader("Access-Control-Allow-Origin", sourceIp);
         // You can specify specific origins instead of "*"
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
        // response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Kycheader");
@@ -70,4 +81,39 @@ public class GatewayIpFilter extends OncePerRequestFilter {
                 Arrays.asList(rolesHeader.split(",")) :
                 Collections.emptyList();
     }
+
+    private boolean isPublicPath(String path) {
+        return PUBLIC_PATHS.stream().anyMatch(publicPath ->
+                path.startsWith(publicPath.replace("/**", "")) ||
+                        path.matches(publicPath.replace("**", ".*"))
+        );
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

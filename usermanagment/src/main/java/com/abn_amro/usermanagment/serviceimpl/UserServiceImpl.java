@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setEnabled(userDTO.isEnabled());
         if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
-            user.setPassword(userDTO.getPassword()); // Optional
+            user.setPassword(PasswordUtil.hashPassword(userDTO.getPassword())); // Optional
         }
         if (userDTO.getRoles() != null) {
             user.setRoles(new HashSet<>(userMapper.mapRoleDtosToSet(userDTO.getRoles())));

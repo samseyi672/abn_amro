@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Validated
 @LogRequestResponse(excludeFields = {"password"})
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 @Tag(name = "Authentication Management Controller", description = "Authentication operations")
 @Slf4j
 public class AuthController {
@@ -32,7 +32,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     @Operation(summary = "Authenticate user and get token")
     public ResponseEntity<ApiResponse<TokenResponse>> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         TokenResponse tokenResponse = authService.authenticateUser(loginRequest);
