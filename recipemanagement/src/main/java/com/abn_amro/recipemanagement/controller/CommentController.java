@@ -59,7 +59,7 @@ public class CommentController {
             )
     })
     @RateLimiter(name = "recipeApiLimiter")
-    @PostMapping
+    @PostMapping("/make_comments")
     public ResponseEntity<ApiResponse<CommentDTO>> createComment(@Valid @RequestBody CommentDTO commentDTO) {
         CommentDTO savedComment = commentService.createComment(commentDTO);
         return ResponseEntity.status(HttpStatus.CREATED)

@@ -29,7 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/recipe")
 @Validated
 @LogRequestResponse(excludeFields = {"password"})
 @Tag(name = "Recipe Management Controller", description = "Recipe Management operations")
@@ -55,7 +55,7 @@ public class RecipeController {
                     )
             )
     })
-    @PostMapping("/")
+    @PostMapping("/make_recipe")
     @RateLimiter(name = "recipeApiLimiter")
     public ResponseEntity<ApiResponse<Long>> createRecipe(@Valid @RequestBody RecipeDTO recipeDTO) {
         Recipe recipe = recipeService.createRecipe(recipeDTO) ;

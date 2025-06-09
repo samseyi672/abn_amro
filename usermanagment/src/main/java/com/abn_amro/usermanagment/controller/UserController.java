@@ -29,7 +29,7 @@ import java.net.URI;
 @RestController
 @Validated
 @LogRequestResponse(excludeFields = {"password"})
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 @Tag(name = "User Management Controller", description = "User Management operations")
 @Slf4j
 public class UserController {

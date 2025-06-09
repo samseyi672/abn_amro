@@ -60,7 +60,7 @@ public class RecipeTagController {
             )
     })
     @RateLimiter(name = "recipeApiLimiter")
-    @PostMapping
+    @PostMapping("/set_recipe_tag")
     public ResponseEntity<ApiResponse<RecipeTagDTO>> create(@Valid @RequestBody RecipeTagDTO dto) {
         RecipeTagDTO saved = recipeTagService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -93,7 +93,7 @@ public class RecipeTagController {
     })
     @Cacheable(value = "recipeTagCache", key = "#recipeTagId")
     @RateLimiter(name = "recipeApiLimiter")
-    @GetMapping("/recipe/{recipeId}")
+    @GetMapping("/{recipeId}")
     public ResponseEntity<ApiResponse<List<RecipeTagDTO>>> getByRecipeId(@PathVariable Long recipeId) {
         return ResponseEntity.ok(ApiResponse.success(
                 recipeTagService.findByRecipeId(recipeId), null, ResponseConstant.STATUS_200, ResponseConstant.MESSAGE_200,false));

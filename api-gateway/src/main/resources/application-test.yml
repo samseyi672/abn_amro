@@ -51,7 +51,7 @@ spring:
             - id: recipe-service
               uri: lb://RECIPE
               predicates:
-                - Path=/abnamro/recipe/**
+                - Path=/api/v1/recipe/**
               filters:
     #            - RewritePath=/abnamro/recipe/(?<segment>.*), /${segment}
                 - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
@@ -134,7 +134,8 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${random.value}
     prefer-ip-address: true
-
+server:
+  port: 8080
 
 
 

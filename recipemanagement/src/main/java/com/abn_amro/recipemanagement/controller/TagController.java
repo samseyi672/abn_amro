@@ -57,7 +57,7 @@ public class TagController {
             )
     })
     @RateLimiter(name = "recipeApiLimiter")
-    @PostMapping
+    @PostMapping("/set_tag")
     public ResponseEntity<ApiResponse<TagDTO>> createTag(@RequestBody TagDTO tagDTO) {
         TagDTO created = tagService.createTag(tagDTO);
         return ResponseEntity.ok(ApiResponse.success(created, null, ResponseConstant.STATUS_201, ResponseConstant.MESSAGE_201,false));
@@ -88,7 +88,7 @@ public class TagController {
     })
     @Cacheable(value = "tagCache", key = "#alltagId")
     @RateLimiter(name = "recipeApiLimiter")
-    @GetMapping()
+    @GetMapping("/tags")
     public ResponseEntity<ApiResponse<List<TagDTO>>> getAllTags( @RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(ApiResponse.success(tagService.getAllTags(page, size), null, ResponseConstant.STATUS_200, ResponseConstant.MESSAGE_200,false));
