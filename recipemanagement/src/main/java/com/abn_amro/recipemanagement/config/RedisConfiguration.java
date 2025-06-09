@@ -31,47 +31,20 @@ public class RedisConfiguration {
     @Value("${spring.redis.jedis.pool.min-idle}")
     private int minIdle;
 
-    @Bean
-    public JedisClientConfiguration getJedisClientConfiguration() {
-        JedisClientConfiguration.JedisPoolingClientConfigurationBuilder JedisPoolingClientConfigurationBuilder = (JedisClientConfiguration.JedisPoolingClientConfigurationBuilder) JedisClientConfiguration
-                .builder();
-        GenericObjectPoolConfig GenericObjectPoolConfig = new GenericObjectPoolConfig();
-        GenericObjectPoolConfig.setMaxTotal(maxTotal);
-        GenericObjectPoolConfig.setMaxIdle(maxIdle);
-        GenericObjectPoolConfig.setMinIdle(minIdle);
-        return JedisPoolingClientConfigurationBuilder.poolConfig(GenericObjectPoolConfig).build();
+    @Bean(name = "jedisConnectionFactory")
+    public JedisConnectionFactory jedisConnectionFactory() {
+        return new JedisConnectionFactory();
     }
 
     @Bean
-    public JedisConnectionFactory getJedisConnectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName(host);
-        if (!StringUtils.isEmpty(password)) {
-            redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
-        }
-        redisStandaloneConfiguration.setPort(port);
-        return new JedisConnectionFactory(redisStandaloneConfiguration, getJedisClientConfiguration());
-    }
-
-    @Bean
-    public RedisTemplate redisTemplate() { // for string intensive operation , use StringRedistemplate
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
-        redisTemplate.setConnectionFactory(getJedisConnectionFactory());
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        return redisTemplate;
-    }
-
-    @Bean(name = "redisBeanTemplate")
-    public RedisTemplate redisBeanTemplate() { // for string intensive operation , use StringRedistemplate
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
-        redisTemplate.setConnectionFactory(getJedisConnectionFactory());
-        // Use String serializer for keys
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        // Use Jackson JSON serializer for values
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-        return redisTemplate;
+    public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory jedisConnectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(jedisConnectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        return template;
     }
 
 }
