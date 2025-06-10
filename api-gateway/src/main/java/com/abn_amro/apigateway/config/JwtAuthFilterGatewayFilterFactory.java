@@ -5,6 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -20,9 +22,8 @@ import java.util.Base64;
 import java.util.List;
 
 @Component("JwtAuthFilter")
-@Slf4j
 public class JwtAuthFilterGatewayFilterFactory extends AbstractGatewayFilterFactory<JwtAuthFilterGatewayFilterFactory.Config> {
-
+    private final static Logger log = LoggerFactory.getLogger(JwtAuthFilterGatewayFilterFactory.class);
     @Value("${gateway.hmac-secret}")
     private String gatewaySecret;
     public static class Config {
@@ -52,9 +53,13 @@ public class JwtAuthFilterGatewayFilterFactory extends AbstractGatewayFilterFact
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
+            log.info("in apigateway: " + exchange.getRequest().getPath());
             String token = extractToken(exchange.getRequest().getHeaders().getFirst("Authorization"));
             String path = exchange.getRequest().getPath().toString();
-            log.info("Request path in apigateway: " + path); // For debugging
+            if(path.startsWith("/api/v1/user/testserver")){
+                return  chain.filter(exchange);
+            }
+            log.info("Request path in apigateway: " + path);
             if (!StringUtils.hasText(token)) {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
@@ -66,44 +71,74 @@ public class JwtAuthFilterGatewayFilterFactory extends AbstractGatewayFilterFact
                         .build()
                         .parseClaimsJws(token)
                         .getBody();
-                // Validate roles if configured
-//                if (config.getRequiredRoles() != null && !config.getRequiredRoles().isEmpty()) {
-//                    List<String> tokenRoles = claims.get("roles", List.class);
-//                    if (tokenRoles == null || !tokenRoles.containsAll(config.getRequiredRoles())) {
-//                        exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-//                        return exchange.getResponse().setComplete();
-//                    }
-//                }
-//                if (path.startsWith("/api/admin") && !claims.get("roles").contains("ADMIN")) {
-//                    exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-//                    return exchange.getResponse().setComplete();
-//                }
-                //Add user info to header for other services
-                exchange.getRequest().mutate()
-                        .header("X-User-ID", claims.getSubject())
-                        .header("X-User-Roles", String.join(",", claims.get("roles", List.class)))
-                        .header("X-Gateway-Signature",
-                                generateHmacSignature(
-                                        claims.getSubject(),
-                                        exchange.getRequest().getPath().toString()
-                                ))
-                        // Audit headers
+
+                String userId = claims.getSubject();
+                String roles = String.join(",", claims.get("roles", List.class));
+
+                String signature = generateHmacSignature(userId, path);
+
+                var mutatedRequest = exchange.getRequest().mutate()
+                        .header("X-User-ID", userId)
+                        .header("X-User-Roles", roles)
+                        .header("X-Gateway-Signature", signature)
                         .header("X-Auth-Time", Instant.now().toString())
                         .build();
 
+                var mutatedExchange = exchange.mutate().request(mutatedRequest).build();
+
+                return chain.filter(mutatedExchange);
+
             } catch (Exception e) {
+                log.error("JWT validation failed", e);
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
-            return chain.filter(exchange);
         };
+//    @Override
+//    public GatewayFilter apply(Config config) {
+//        return (exchange, chain) -> {
+//            log.info("in apigateway: " +exchange.getRequest().getPath()); // For debugging
+//            String token = extractToken(exchange.getRequest().getHeaders().getFirst("Authorization"));
+//            String path = exchange.getRequest().getPath().toString();
+//            log.info("Request path in apigateway: " + path); // For debugging
+//            if (!StringUtils.hasText(token)) {
+//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//                return exchange.getResponse().setComplete();
+//            }
+//            try {
+//                SecretKey key = Keys.hmacShaKeyFor(config.getSigningKey().getBytes());
+//                Claims claims = Jwts.parserBuilder()
+//                        .setSigningKey(key)
+//                        .build()
+//                        .parseClaimsJws(token)
+//                        .getBody();
+//                //Add user info to header for other services
+//                exchange.getRequest().mutate()
+//                        .header("X-User-ID", claims.getSubject())
+//                        .header("X-User-Roles", String.join(",", claims.get("roles", List.class)))
+//                        .header("X-Gateway-Signature",
+//                                generateHmacSignature(
+//                                        claims.getSubject(),
+//                                        exchange.getRequest().getPath().toString()
+//                                ))
+//                        // Audit headers
+//                        .header("X-Auth-Time", Instant.now().toString())
+//                        .build();
+//
+//            } catch (Exception e) {
+//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//                return exchange.getResponse().setComplete();
+//            }
+//            return chain.filter(exchange);
+//        };
     }
 
     private String generateHmacSignature(String userId, String path) {
         try {
             Mac hmac = Mac.getInstance("HmacSHA256");
             hmac.init(new SecretKeySpec(gatewaySecret.getBytes(), "HmacSHA256"));
-            String data = userId + "|" + path;
+//            String data = userId + "|" + path;
+            String data = path  + "|" + userId;
             return Base64.getEncoder().encodeToString(hmac.doFinal(data.getBytes()));
         } catch (Exception e) {
             throw new RuntimeException("HMAC generation failed", e);

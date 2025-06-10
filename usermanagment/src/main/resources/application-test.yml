@@ -13,10 +13,10 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
     host: smtp.gmail.com
-    port: 465
-#    port: 587
+#    port: 465
+    port: 587
     username: samseyi672@gmail.com
-    password: cxpgkwjpexctquha
+    password: zvdh wpaa ykgb nnqw
     smtp:
       starttls:
         enable: true
@@ -57,9 +57,10 @@ api:
 com:
   abnamro:
     notify:
-      email_to_A: chaniya.mac.intosh@nl.abnamro.com
+      email_to_A: samseyi672@gmail.com
       email_subject_A: Registration on Recipe Manager
-      email_to_C: chaniya.mac.intosh@nl.abnamro.com
+#      email_to_C: chaniya.mac.intosh@nl.abnamro.com
+      email_to_C: sam_it28@yahoo.com
 resilience4j:
   ratelimiter:
     instances:

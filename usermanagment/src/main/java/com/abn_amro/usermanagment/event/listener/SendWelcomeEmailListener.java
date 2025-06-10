@@ -8,8 +8,6 @@ import com.abn_amro.usermanagment.event.UserRegisteredEvent;
 import com.abn_amro.usermanagment.exceptions.MailServerException;
 import com.abn_amro.usermanagment.service.MailService;
 import com.abn_amro.usermanagment.service.ThymeLeafContextService;
-import com.abn_amro.usermanagment.serviceimpl.MailServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +16,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
@@ -28,15 +27,19 @@ import java.util.Map;
 public class SendWelcomeEmailListener {
     private final static Logger log = LoggerFactory.getLogger(SendWelcomeEmailListener.class);
     private  final MailService mailService ;
+
+    private final TemplateEngine templateEngine;
     private final ResourceLoader resourceLoader;
     private final ClientConfigProperties clientConfigProperties;
     private final ThymeLeafContextService thymeLeafContextService ;
 
+
     @Value("${api.activationlink}")
     private String activationLink;
 
-    public SendWelcomeEmailListener(MailService mailService, ResourceLoader resourceLoader, ClientConfigProperties clientConfigProperties, ThymeLeafContextService thymeLeafContextService) {
+    public SendWelcomeEmailListener(MailService mailService, TemplateEngine templateEngine, ResourceLoader resourceLoader, ClientConfigProperties clientConfigProperties, ThymeLeafContextService thymeLeafContextService) {
         this.mailService = mailService;
+        this.templateEngine = templateEngine;
         this.resourceLoader = resourceLoader;
         this.clientConfigProperties = clientConfigProperties;
         this.thymeLeafContextService = thymeLeafContextService;
@@ -50,9 +53,8 @@ public class SendWelcomeEmailListener {
         nameEmailDTO.setEmail(event.getEmail());
         nameEmailDTO.setName(event.getFirstname()+" "+event.getLastname());
         Map<String,Object> context = thymeLeafContextService.initializeContextForUserRegistration(nameEmailDTO);
-        Resource resource = resourceLoader.getResource("classpath:templates/mail/registration_email.html");
-        String template = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        String modifiedTemplate = template
+        String html = templateEngine.process("mail/registration_email", (Context)context.get("emailContext"));
+        String modifiedTemplate = html
                 .replace("{firstName}", event.getFirstname())
                 .replace("{lastName}", event.getLastname())
                 .replace("{activationLink}", activationLink);
@@ -64,7 +66,7 @@ public class SendWelcomeEmailListener {
                         .thymeleafTemplateName(modifiedTemplate)
                         .thymeleafContext((Context)context.get("emailContext"))
                         .build() ;
-        mailService.sendEmailAsync(mail);
+        mailService.sendEmailAsync(mail,templateEngine);
     }
 }
 

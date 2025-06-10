@@ -1,16 +1,4 @@
 services:
-    keycloak:
-      image: quay.io/keycloak/keycloak:26.0.7
-      container_name: keycloak
-      ports:
-        - "7080:8080"
-      environment:
-        KEYCLOAK_ADMIN: "admin"
-        KEYCLOAK_ADMIN_PASSWORD: "admin"
-      command: "start-dev"
-      extends:
-        file: common-config.yml
-        service: network-deploy-service
     read:
       image: grafana/loki:3.1.2
       command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -261,18 +249,6 @@ services:
         file: common-config.yml
         service: microservice-db-config
 
-    recipetestdb:
-      container_name: recipedb
-      ports:
-        - "3308:3306"
-      volumes:
-        - recipetestdb_data:/var/lib/mysql
-      environment:
-        MYSQL_DATABASE: recipe_db
-      extends:
-        file: common-config.yml
-        service: microservice-db-config
-
     redis:
       image: redis:7.2
       container_name: redis-server
@@ -296,28 +272,13 @@ volumes:
   userstestdb_data:
     driver: local
 
-  # configserver:
-  #   image: "samseyi672/configserver:1"
-  #   container_name: configserver-ms
-  #   ports:
-  #     - "8071:8071"
-  #   healthcheck:
-  #     test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 10
-  #     start_period: 10s
-  #   extends:
-  #     file: common-config.yml
-  #     service: microservice-base-config
-
   recipe:
-    image: "samseyi672/recipemanager:1"
+    image: "samseyi672/recipe:1"
     container_name: recipemanagement-ms
     ports:
       - "8080:8080"
     environment:
-      SPRING_APPLICATION_NAME: "recipemanagement"
+      SPRING_APPLICATION_NAME: "recipe"
       SPRING_DATASOURCE_URL: "jdbc:mysql://recipedb:3306/recipe_db"
     depends_on:
       recipedb:
@@ -343,7 +304,7 @@ volumes:
       recipe:
         condition: service_healthy
     environment:
-      SPRING_APPLICATION_NAME: "apigateway"
+      SPRING_APPLICATION_NAME: "gatewayserver"
       OTEL_SERVICE_NAME: "apigateway"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
     extends:

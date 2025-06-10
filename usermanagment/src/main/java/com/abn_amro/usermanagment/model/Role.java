@@ -15,7 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "users")
 @ToString(exclude = "users")
 public class Role extends BaseEntity{
-    @Column(name="role",unique = true)
+    @Column(name="role")
     private String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY,cascade = CascadeType.ALL)

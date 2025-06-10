@@ -28,12 +28,12 @@ import java.util.stream.Stream;
 public class MailServiceImpl implements MailService {
     private final static Logger logger = LoggerFactory.getLogger(MailServiceImpl.class);
     private final JavaMailSender mailSender;
-    private final TemplateEngine templateEngine;
+//    private final TemplateEngine templateEngine;
     private final ObjectMapper mapper;
     private final MailConfigProperties mailConfigProperties;
 
     @Override
-    public void sendEmail(Mail mail) throws MailServerException {
+    public void sendEmail(Mail mail,TemplateEngine templateEngine) throws MailServerException {
         if (!isValidEmail(mail.getMailTo())) {
             throw new InvalidEmailException("Invalid 'To' email address: " + mail.getMailTo());
         }
@@ -63,6 +63,37 @@ public class MailServiceImpl implements MailService {
         }
     }
 
+    @Override
+    public void sendEmail(Mail mail,String htmlTemplate,TemplateEngine templateEngine) throws MailServerException {
+        if (!isValidEmail(mail.getMailTo())) {
+            throw new InvalidEmailException("Invalid 'To' email address: " + mail.getMailTo());
+        }
+        try {
+            var mailMessage = mailSender.createMimeMessage();
+            var mailHelper = new MimeMessageHelper(mailMessage, true, "UTF-8");
+            mailHelper.setSubject(mail.getMailSubject());
+            mailHelper.setFrom(mail.getMailFrom());
+            mailHelper.setTo(mail.getMailTo());
+            mailHelper.setCc(mail.getCcTo());
+            String html = mail.getThymeleafTemplateName()==null?htmlTemplate:mail.getThymeleafTemplateName();
+            final String stringyfiedHtmlContent = templateEngine.process(html, mail.getThymeleafContext());
+            mailHelper.setText(stringyfiedHtmlContent, true);
+            //Add Attachment if any
+            mailAttachmentStream(mail.getAttachment()).forEach(attachment -> {
+                try{
+                    mailHelper.addAttachment(attachment.getAttachmentFileName(), attachment.getAttachmentSource(),
+                            attachment.getAttachmentContentType());
+                }catch (Exception ex){
+                    logger.error(ex.getMessage(), ex);
+                }
+            });
+            mailSender.send(mailHelper.getMimeMessage());
+            logger.info(">>Email sending completed>>>");
+        } catch (Exception e) {
+            logger.info(">>Socket connection error>> {}", e.getMessage(), e);
+            throw new MailServerException("Error trying to send mail");
+        }
+    }
     private boolean isValidEmail(String email) {
         Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
         Matcher matcher = pattern.matcher(email);
@@ -70,8 +101,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendEmailAsync(Mail mail) throws MailServerException {
-                this.sendEmail(mail);
+    public void sendEmailAsync(Mail mail,TemplateEngine templateEngine) throws MailServerException {
+                this.sendEmail(mail,templateEngine);
     }
     private Stream<Attachment> mailAttachmentStream(List<Attachment> attachments){
         if(Objects.nonNull(attachments)){

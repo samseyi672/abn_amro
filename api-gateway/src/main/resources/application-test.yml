@@ -7,23 +7,6 @@ spring:
       import-check:
         enabled: false
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-            allowedHeaders: "*"
-      httpclient:
-        connect-timeout: 1000
-        response-timeout: 10s
       routes:
         - id: swagger-ui
           uri: http://localhost:${server.port}
@@ -35,10 +18,10 @@ spring:
                 anonymousEndpoints: "/**"
         - id: user-service
           uri: lb://USER
+#          uri: http://localhost:8080
           predicates:
             - Path=/api/v1/user/**
           filters:
-            - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
             - name: CircuitBreaker
               args:
                 name: userCircuitBreaker
@@ -46,13 +29,13 @@ spring:
             - name: JwtAuthFilter
               args:
                 signingKey: ${jwt.secret-key}
-                anonymousEndpoints: /api/v1/user/login,/api/v1/user/health,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
+                anonymousEndpoints: /api/v1/user/testserver,/api/v1/user/login,/api/v1/user/health,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
         - id: recipe-service
           uri: lb://RECIPE
           predicates:
             - Path=/api/v1/recipe/**,/api/v1/comment/**,/api/v1/recipetag/**,/api/v1/tag/**
           filters:
-            - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
+            #            - AddResponseHeader=X-Response-Time, "${#localDateTime.now().toString()}"
             - name: Retry
               args:
                 retries: 3
@@ -71,6 +54,29 @@ spring:
               args:
                 signingKey: ${jwt.secret-key}
                 anonymousEndpoints: /api/v1/user/health,/swagger-ui.html,/v3/api-docs,/swagger-resources/**,/webjars/**,/actuator/health
+      discovery:
+        default-filters:
+          - AddRequestHeader=X-Forwarded-For, ${request.remoteAddress}
+          - AddRequestHeader=Forwarded, for=${request.remoteAddress}
+          - AddRequestHeader=X-Real-IP, ${request.remoteAddress}
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+      httpclient:
+        connect-timeout: 100
+        response-timeout: 5s
+        pool:
+          max-idle-time: 1s
     discovery:
       client:
         health-indicator:

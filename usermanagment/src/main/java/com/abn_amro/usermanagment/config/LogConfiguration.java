@@ -50,11 +50,9 @@ public class LogConfiguration {
         if (annotation == null) {
             annotation = declaringClass.getAnnotation(LogRequestResponse.class);
         }
-
         if (annotation == null) {
             return joinPoint.proceed(); // fallback, shouldn't happen
         }
-
         // Same logic from before...
         if (annotation.logRequestBody()) {
             Object[] args = joinPoint.getArgs();
@@ -65,17 +63,13 @@ public class LogConfiguration {
             log.info("Request from IP: " + request.getRemoteAddr());
             log.info("Request body: " + objectMapper.writeValueAsString(filtered));
         }
-
         Object result = joinPoint.proceed();
-
         if (annotation.logResponseBody() && result instanceof ResponseEntity<?>) {
             ResponseEntity<?> response = (ResponseEntity<?>) result;
             log.info("Response: " + objectMapper.writeValueAsString(response.getBody()));
         }
-
         return result;
     }
-
 
     private Object filterFields(Object arg, String[] excludeFields) {
         try {

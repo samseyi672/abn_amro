@@ -95,7 +95,7 @@ public class UserController {
                 .path("/{id}")
                 .buildAndExpand(user.getId())
                 .toUri();
-        response.setUrl(location.toString());
+        response.setUrl(location.toString().replace("/register",""));
         return ResponseEntity.created(location)
                 .body(response);
     }
@@ -203,7 +203,7 @@ public class UserController {
                 .body(response);
     }
 
-    @GetMapping("/activate")
+    @PutMapping("/activate")
     public ResponseEntity<ApiResponse<String>> activateUser(@RequestParam String token) {
         userService.activateUserByToken(token);
         return ResponseEntity.ok(new ApiResponse<>(

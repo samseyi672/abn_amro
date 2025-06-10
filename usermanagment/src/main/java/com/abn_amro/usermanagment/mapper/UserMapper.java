@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
     @Mapping(source = "roles", target = "roles", qualifiedByName = "mapRolesToDtoList")
     UserDTO toDto(User user);
 

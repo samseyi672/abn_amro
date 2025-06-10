@@ -18,11 +18,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableDiscoveryClient
 @OpenAPIDefinition(
 		info = @Info(
-				title = "User Management REST API Documentation",
+				title = "User Management REST API",
 				description = "User Management microservice REST API Documentation",
 				version = "v1",
 				contact = @Contact(
-						name = "Samson Oluwaseyi",
+						name = "ABN AMRO",
 						email = "samson.oluwaseyi@capgemini.com",
 						url = ""
 				),

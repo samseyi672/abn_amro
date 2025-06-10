@@ -3,6 +3,7 @@ package com.abn_amro.usermanagment.serviceimpl;
 import com.abn_amro.usermanagment.dto.request.UserDTO;
 import com.abn_amro.usermanagment.dto.response.ResponseConstants;
 import com.abn_amro.usermanagment.event.UserRegisteredEvent;
+import com.abn_amro.usermanagment.exceptions.UserAlreadExistExcepton;
 import com.abn_amro.usermanagment.exceptions.UserNotFoundException;
 import com.abn_amro.usermanagment.mapper.UserMapper;
 import com.abn_amro.usermanagment.model.User;
@@ -18,7 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -26,24 +29,29 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepositories ;
-    private UserMapper userMapper ;
-    private ApplicationEventPublisher eventPublisherAware;
+    private final UserRepository userRepositories ;
+    private final UserMapper userMapper ;
+    private final ApplicationEventPublisher eventPublisherAware;
 
     @Transactional
     @Override
     public User createUser(UserDTO userDTO) {
        User user =  userMapper.toEntity(userDTO) ;
-       user.setPassword(PasswordUtil.hashPassword(user.getPassword()));
+       user.setPassword(PasswordUtil.hashPassword(userDTO.getPassword()));
        log.info("user {}",user);
+       user.setCreatedAt(LocalDateTime.now());
+       Optional<User> existingUser = userRepositories.findByUserNameOrEmail(user.getUserName(),user.getEmail());
+       if(existingUser.isPresent()){
+           throw new UserAlreadExistExcepton("User already exists exception ...");
+       }
+       user.setActivationToken(UUID.randomUUID().toString());
        User user1 = userRepositories.save(user);
-       user1.setPassword(null);
        log.info("created user "+user1);
        UserRegisteredEvent event = new UserRegisteredEvent(user1.getId(),
                user1.getFirstName(),user1.getFirstName(),
                user1.getEmail());
        eventPublisherAware.publishEvent(event);
-      return user;
+      return user1;
     }
 
     @Override

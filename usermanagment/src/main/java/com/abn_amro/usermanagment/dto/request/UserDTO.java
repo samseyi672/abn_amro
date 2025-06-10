@@ -25,20 +25,20 @@ public class UserDTO {
     )
     private Long id;
     @Schema(
-            name = "firstname",
-            description = "firstname of the user"
+            name = "firstName",
+            description = "firstName of the user"
     )
-    @NotEmpty(message = "firstname cannot be empty")
+    @NotEmpty(message = "firstName cannot be empty")
     private String firstName;
     @Schema(
-            name = "lastname",
-            description = "lastname of the user"
+            name = "lastName",
+            description = "lastName of the user"
     )
     @NotEmpty(message = "lastname cannot be empty")
     private  String lastName;
     @Schema(
-            name = "username",
-            description = "Unique username"
+            name = "userName",
+            description = "Unique userName"
     )
     @NotEmpty(message = "username cannot be empty")
     private String userName;

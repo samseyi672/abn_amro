@@ -22,25 +22,17 @@ public class GatewayTrustFilter implements Filter {
             "/swagger-ui.html",
             "/swagger-ui/index.html",
             "/v3/api-docs",
-            "/swagger-resources/**",
-            "/webjars/**",
+            "/swagger-resources",
+            "/webjars",
             "/actuator/health",
             "/api/v1/user/testserver",
-            "/swagger-resources/configuration/ui", "/swagger-resources/configuration/security",
-            "/swagger-resources",
+            "/swagger-resources/configuration/ui",
+            "/swagger-resources/configuration/security",
             "/configuration/ui",
-            "/swagger-resources/**",
             "/configuration/security",
             "/favicon.ico",
-            "/swagger-ui/*",
-            "/swagger-ui/**",
-            "/webjars/**",
-            "/v2/api-docs",
-            "/v3/api-docs/*",
-            "/v3/api-docs/**",
-            "/v3/api-docs",
-            "/v2/api-docs/**"
-
+            "/swagger-ui",
+            "/v2/api-docs"
     );
 
     public GatewayTrustFilter(String gatewaySecret) {
@@ -51,22 +43,26 @@ public class GatewayTrustFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse  response  =   (HttpServletResponse) res;
+        HttpServletResponse response = (HttpServletResponse) res;
         String forwardedFor = request.getHeader("X-Forwarded-For");
         String sourceIp = (forwardedFor != null) ? forwardedFor.split(",")[0].trim() : request.getRemoteAddr();
-        log.info("GatewayTrustFilter sourceIp "+sourceIp);
+        log.info("GatewayTrustFilter sourceIp {}", sourceIp);
         String path = request.getRequestURI();
-        log.info("GatewayTrustFilter path "+path);
-        if (isPublicPath(path)) {
-            chain.doFilter(request,response);
+        log.info("GatewayTrustFilter path {}", path);
+        // Allow public paths
+        if (isPublicPath(path) || path.contains("/api/v1/user/register")
+                || path.contains("/api/v1/user/login")
+                || path.contains("/api/v1/user/activate")) {
+            chain.doFilter(request, response);
             return;
         }
         String signature = request.getHeader("X-Gateway-Signature");
         if (!isValidSignature(request, signature)) {
-            response.sendError(401, "Untrusted request source");
+            log.info("received signature ....."+signature);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Untrusted request source");
             return;
         }
-        chain.doFilter(req, res);
+        chain.doFilter(request, response);
     }
 
     private boolean isValidSignature(HttpServletRequest req, String receivedSig) {
@@ -81,15 +77,13 @@ public class GatewayTrustFilter implements Filter {
             return false;
         }
     }
+
     private boolean isPublicPath(String path) {
         return PUBLIC_PATHS.stream().anyMatch(publicPath ->
-                path.startsWith(publicPath.replace("/**", "")) ||
-                        path.matches(publicPath.replace("**", ".*"))
+                path.startsWith(publicPath)
         );
     }
 }
-
-
 
 
 

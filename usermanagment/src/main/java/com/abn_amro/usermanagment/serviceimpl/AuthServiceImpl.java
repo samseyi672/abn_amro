@@ -12,16 +12,12 @@ import com.abn_amro.usermanagment.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponse authenticateUser(LoginRequest loginRequest) {
-        Optional<User> userOpt = userRepository.findByUserName(loginRequest.getUsername());
+        Optional<User> userOpt = userRepository.findByUserNameOrEmail(loginRequest.getUserName(), loginRequest.getUserName());
         if (userOpt.isEmpty()) {
             throw new AuthenticationException("Invalid username or password");
         }

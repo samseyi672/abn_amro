@@ -110,7 +110,6 @@ public class UserRepositoryTest {
         user.setFirstName("testme");
         user.setLastName("testmelastname");
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("samson");
         //user.setId(4l);
         User user1 = userRepositories.save(user);
         System.out.printf("user1 "+user1);
