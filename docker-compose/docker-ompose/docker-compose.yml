@@ -46,7 +46,7 @@ volumes:
     driver: local
 
   recipe:
-    image: "samseyi672/recipemanager:1"
+    image: "samseyi672/recipemanagement:1"
     container_name: recipemanagement-ms
     ports:
       - "8082:8082"
@@ -67,7 +67,7 @@ volumes:
       - ./docker-logs:/logs
   
   gatewayserver:
-    image: "samseyi/gatewayserver:1"
+    image: "samseyi672/apigateway:1"
     container_name: apigateway-ms
     ports:
       - "8072:8072"
@@ -85,7 +85,7 @@ volumes:
       service: microservice-eureka-config
 
   eurekaserver:
-    image: "samseyi672/eurekaserver:1"
+    image: "samseyi672/servicediscovery:1"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -103,7 +103,7 @@ volumes:
       OTEL_SERVICE_NAME: "eurekaserver"
 
   user:
-    image: "samseyi672/user:1"
+    image: "samseyi672/usermanagment:1"
     container_name: user-ms
     ports:
       - "8090:8090"

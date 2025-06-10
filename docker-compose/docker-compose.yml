@@ -225,18 +225,6 @@ services:
         file: common-config.yml
         service: microservice-db-config
 
-    userstestdb:
-      container_name: userstestdb
-      ports:
-        - "3309:3306"
-      volumes:
-        - userstestdb_data:/var/lib/mysql
-      environment:
-        MYSQL_DATABASE: users_db
-      extends:
-        file: common-config.yml
-        service: microservice-db-config
-
     recipedb:
       container_name: recipedb
       ports:
@@ -267,16 +255,12 @@ volumes:
     driver: local
   usersdb_data:
     driver: local
-  recipetestdb:
-    driver: local
-  userstestdb_data:
-    driver: local
 
   recipe:
-    image: "samseyi672/recipe:1"
+    image: "samseyi672/recipemanagement:1"
     container_name: recipemanagement-ms
     ports:
-      - "8080:8080"
+      - "8082:8082"
     environment:
       SPRING_APPLICATION_NAME: "recipe"
       SPRING_DATASOURCE_URL: "jdbc:mysql://recipedb:3306/recipe_db"
@@ -285,7 +269,7 @@ volumes:
         condition: service_healthy
       redis:
         condition: service_healthy
-      configserver:
+      eurekaserver:
         condition: service_healthy
     extends:
       file: common-config.yml
@@ -294,7 +278,7 @@ volumes:
       - ./docker-logs:/logs
   
   gatewayserver:
-    image: "samseyi/apigateway:1"
+    image: "samseyi672/apigateway:1"
     container_name: apigateway-ms
     ports:
       - "8072:8072"
@@ -302,6 +286,8 @@ volumes:
       users:
         condition: service_healthy
       recipe:
+        condition: service_healthy
+      eurekaserver:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gatewayserver"
@@ -312,13 +298,10 @@ volumes:
       service: microservice-eureka-config
 
   eurekaserver:
-    image: "samseyi672/eurekaserver:1"
+    image: "samseyi672/servicediscovery:1"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
-    depends_on:
-      configserver:
-        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -333,7 +316,7 @@ volumes:
       OTEL_SERVICE_NAME: "eurekaserver"
 
   user:
-    image: "samseyi672/user:1"
+    image: "samseyi672/usermanagment:1"
     container_name: user-ms
     ports:
       - "8090:8090"
@@ -345,7 +328,7 @@ volumes:
         condition: service_healthy
       redis:
         condition: service_healthy
-      configserver:
+      eurekaserver:
         condition: service_healthy
     extends:
       file: common-config.yml

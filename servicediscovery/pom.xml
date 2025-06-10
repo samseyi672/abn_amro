@@ -105,6 +105,19 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.2</version>
+				<configuration>
+					<to>
+						<image>samseyi672/${project.artifactId}:1</image>
+					</to>
+					<container>
+						<user>root</user> <!-- write access to my app -->
+					</container>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
