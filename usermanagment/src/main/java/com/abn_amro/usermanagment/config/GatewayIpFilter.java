@@ -79,9 +79,8 @@ public class GatewayIpFilter extends OncePerRequestFilter {
             response.getWriter().write("Forbidden: You do not have permission to access this resource.");
             return;
         }
-
         // Set CORS headers (adjust as needed)
-        response.setHeader("Access-Control-Allow-Origin", "*"); // Or specify allowed origins
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 

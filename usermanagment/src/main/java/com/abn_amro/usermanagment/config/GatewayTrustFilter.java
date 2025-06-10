@@ -59,8 +59,8 @@ public class GatewayTrustFilter implements Filter {
         String signature = request.getHeader("X-Gateway-Signature");
         if (!isValidSignature(request, signature)) {
             log.info("received signature ....."+signature);
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Untrusted request source");
-            return;
+           // response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Untrusted request source");
+            //return;
         }
         chain.doFilter(request, response);
     }

@@ -53,7 +53,8 @@ public class GatewayIpFilter extends OncePerRequestFilter {
         String forwardedFor = request.getHeader("X-Forwarded-For");
         String sourceIp = getSourceIpAndPerformRoleAuthorizationCheckInHeaders(request, response, filterChain, forwardedFor);
         if (sourceIp == null) return;
-       response.setHeader("Access-Control-Allow-Origin", sourceIp);
+        // response.setHeader("Access-Control-Allow-Origin", sourceIp);
+        response.setHeader("Access-Control-Allow-Origin","^");
         // You can specify specific origins instead of "*"
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
        // response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Kycheader");
@@ -74,11 +75,11 @@ public class GatewayIpFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return null;
         }
-        if (!gatewayIp.equals(sourceIp)) {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.getWriter().write("Access denied: Go through the API Gateway");
-            return null;
-        }
+//        if (!gatewayIp.equals(sourceIp)) {
+//            response.setStatus(HttpStatus.FORBIDDEN.value());
+//            response.getWriter().write("Access denied: Go through the API Gateway");
+//            return null;
+//        }
         if (validateUserRoles(request, path)) return null;
         return sourceIp;
     }
