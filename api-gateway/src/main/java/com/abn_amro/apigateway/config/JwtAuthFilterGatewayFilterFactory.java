@@ -94,43 +94,6 @@ public class JwtAuthFilterGatewayFilterFactory extends AbstractGatewayFilterFact
                 return exchange.getResponse().setComplete();
             }
         };
-//    @Override
-//    public GatewayFilter apply(Config config) {
-//        return (exchange, chain) -> {
-//            log.info("in apigateway: " +exchange.getRequest().getPath()); // For debugging
-//            String token = extractToken(exchange.getRequest().getHeaders().getFirst("Authorization"));
-//            String path = exchange.getRequest().getPath().toString();
-//            log.info("Request path in apigateway: " + path); // For debugging
-//            if (!StringUtils.hasText(token)) {
-//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-//                return exchange.getResponse().setComplete();
-//            }
-//            try {
-//                SecretKey key = Keys.hmacShaKeyFor(config.getSigningKey().getBytes());
-//                Claims claims = Jwts.parserBuilder()
-//                        .setSigningKey(key)
-//                        .build()
-//                        .parseClaimsJws(token)
-//                        .getBody();
-//                //Add user info to header for other services
-//                exchange.getRequest().mutate()
-//                        .header("X-User-ID", claims.getSubject())
-//                        .header("X-User-Roles", String.join(",", claims.get("roles", List.class)))
-//                        .header("X-Gateway-Signature",
-//                                generateHmacSignature(
-//                                        claims.getSubject(),
-//                                        exchange.getRequest().getPath().toString()
-//                                ))
-//                        // Audit headers
-//                        .header("X-Auth-Time", Instant.now().toString())
-//                        .build();
-//
-//            } catch (Exception e) {
-//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-//                return exchange.getResponse().setComplete();
-//            }
-//            return chain.filter(exchange);
-//        };
     }
 
     private String generateHmacSignature(String userId, String path) {
