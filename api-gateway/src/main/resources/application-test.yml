@@ -84,12 +84,15 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
-      connect-timeout: 2s
-      timeout: 1s
+      connect-timeout: 10s
+      timeout: 10s
 
 management:
+  health:
+    redis:
+      enabled: false
   endpoints:
     web:
       exposure:

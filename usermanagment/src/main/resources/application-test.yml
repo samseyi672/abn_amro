@@ -97,6 +97,11 @@ feign:
         connectTimeout: 2000
         readTimeout: 3000
 management:
+  health:
+    mail:
+      enabled: false
+    redis:
+      enabled: false
   metrics:
     tags:
         application:

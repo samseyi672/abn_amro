@@ -111,6 +111,11 @@ feign:
         readTimeout: 3000
 
 management:
+  health:
+    mail:
+      enabled: false
+    redis:
+      enabled: false
   metrics:
     tags:
         application:

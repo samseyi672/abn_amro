@@ -26,8 +26,13 @@ services:
 
     redis:
       image: redis:7.2
-      container_name: redis-server
+      container_name: redis
       restart: unless-stopped
+      healthcheck:
+        test: ["CMD", "redis-cli", "-a", "Trust@@$$Banc_COOperate**#%%$$Group", "ping"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
       ports:
         - "6379:6379"
       command: [
@@ -37,91 +42,106 @@ services:
       ]
       volumes:
         - redis_data:/data
-volumes:
-  recipedb_data:
-    driver: local
-  usersdb_data:
-    driver: local
-  redis_data:
-    driver: local
 
-  recipe:
-    image: "samseyi672/recipemanagement:1"
-    container_name: recipemanagement-ms
-    ports:
-      - "8082:8082"
-    environment:
-      SPRING_APPLICATION_NAME: "recipemanagement"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://recipedb:3306/recipe_db"
-    depends_on:
-      recipedb:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      eurekaserver:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: microservice-configserver-config
-    volumes:
-      - ./docker-logs:/logs
+    recipe:
+      image: "samseyi672/recipemanagement:1"
+      container_name: recipemanagementms
+      ports:
+        - "8082:8082"
+      environment:
+        SPRING_APPLICATION_NAME: "recipemanagement"
+        SPRING_REDIS_HOST: redis
+        SPRING_REDIS_PORT: 6379
+        SPRING_DATASOURCE_URL: "jdbc:mysql://recipedb:3306/recipe_db"
+      depends_on:
+        gatewayserver:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+      extends:
+        file: common-config.yml
+        service: microservice-configserver-config
   
-  gatewayserver:
-    image: "samseyi672/apigateway:1"
-    container_name: apigateway-ms
-    ports:
-      - "8072:8072"
-    depends_on:
-      users:
-        condition: service_healthy
-      recipe:
-        condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "apigateway"
-      OTEL_SERVICE_NAME: "apigateway"
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
-    extends:
-      file: common-config.yml
-      service: microservice-eureka-config
+    gatewayserver:
+      image: "samseyi672/apigateway:1"
+      container_name: apigateway
+      ports:
+        - "8080:8080"
+      depends_on:
+        eurekaserver:
+          condition: service_healthy
+        redis:
+          condition: service_healthy
+        usersdb:
+          condition: service_healthy
+        recipedb:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+      environment:
+        SPRING_APPLICATION_NAME: "apigateway"
+        OTEL_SERVICE_NAME: "apigateway"
+        # SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
+      extends:
+        file: common-config.yml
+        service: microservice-eureka-config
 
-  eurekaserver:
-    image: "samseyi672/servicediscovery:1"
-    container_name: eurekaserver-ms
-    ports:
-      - "8070:8070"
-    healthcheck:
-      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
-      interval: 20s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
-    extends:
-      file: common-config.yml
-      service: microservice-configserver-config
-    environment:
-      SPRING_APPLICATION_NAME: "eurekaserver"
-      OTEL_SERVICE_NAME: "eurekaserver"
+    eurekaserver:
+      image: "samseyi672/servicediscovery:1"
+      container_name: eurekaserver-ms
+      ports:
+        - "8761:8761"
+      healthcheck:
+        test: "curl --fail --silent localhost:8761/actuator/health/readiness | grep UP || exit 1"
+        interval: 20s
+        timeout: 5s
+        retries: 20
+        start_period: 10s
+      extends:
+        file: common-config.yml
+        service: microservice-configserver-config
+      environment:
+        SPRING_APPLICATION_NAME: "eurekaserver"
+        SPRING_PROFILES_ACTIVE: test
+        SERVER_PORT: 8761
+        # OTEL_SERVICE_NAME: "eurekaserver"
 
-  user:
-    image: "samseyi672/usermanagment:1"
-    container_name: user-ms
-    ports:
-      - "8090:8090"
-    environment:
-      SPRING_APPLICATION_NAME: "user"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://usersdb:3306/users_db"
-    depends_on:
-      usersdb:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      eurekaserver:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: microservice-configserver-config
-    volumes:
-      - ./docker-logs:/logs
+    user:
+      image: "samseyi672/usermanagment:1"
+      container_name: user-ms
+      ports:
+        - "8090:8090"
+      environment:
+        SPRING_APPLICATION_NAME: "user"
+        SPRING_REDIS_HOST: redis
+        SPRING_REDIS_PORT: 6379
+        SPRING_DATASOURCE_URL: "jdbc:mysql://usersdb:3306/users_db"
+      depends_on:
+        gatewayserver:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+      extends:
+        file: common-config.yml
+        service: microservice-configserver-config
+
+volumes:
+ recipedb_data:
+   driver: local
+ usersdb_data:
+   driver: local
+ redis_data:
+   driver: local
+
 networks:
   abn_amro_bank:
     driver: "bridge"
