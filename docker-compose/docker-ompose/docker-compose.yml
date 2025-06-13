@@ -8,6 +8,11 @@ services:
         - usersdb_data:/var/lib/mysql
       environment:
         MYSQL_DATABASE: users_db
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
       extends:
         file: common-config.yml
         service: microservice-db-config
@@ -20,6 +25,11 @@ services:
         - recipedb_data:/var/lib/mysql
       environment:
         MYSQL_DATABASE: recipe_db
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
       extends:
         file: common-config.yml
         service: microservice-db-config
@@ -87,7 +97,6 @@ services:
       environment:
         SPRING_APPLICATION_NAME: "apigateway"
         OTEL_SERVICE_NAME: "apigateway"
-        # SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
       extends:
         file: common-config.yml
         service: microservice-eureka-config
