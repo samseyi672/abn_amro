@@ -131,13 +131,13 @@ endpoints:
     enabled: true
 eureka:
   instance:
-    hostname: localhost
+    hostname: eurekaserver
     preferIpAddress: true
   client:
     fetchRegistry: true
     registerWithEureka: true
-    serviceurl:
-      defaultZone: http://localhost:8761/eureka/
+    service-url:
+      defaultZone: http://eurekaserver:8761/eureka/
 #for description in the eureka microservice network.
 info:
   app:

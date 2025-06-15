@@ -11,7 +11,7 @@ spring:
 #    import: "optional:configserver:http://localhost:8071/"
 eureka:
   instance:
-    hostname: localhost
+    hostname: eurekaserver
   client:
    register-with-eureka: false
    fetch-registry: false

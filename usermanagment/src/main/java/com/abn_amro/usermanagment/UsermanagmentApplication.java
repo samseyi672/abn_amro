@@ -36,7 +36,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 				url = "l"
 		)
 )
-
 public class UsermanagmentApplication {
 
 	public static void main(String[] args) {

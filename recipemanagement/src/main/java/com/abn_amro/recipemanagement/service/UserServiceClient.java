@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@FeignClient(name = "user", fallbackFactory = UserServiceFallbackFactory.class)
+@FeignClient(name = "user",url = "${user.service.url}", fallbackFactory = UserServiceFallbackFactory.class)
 public interface UserServiceClient {
 
     @GetMapping("/api/v1/user/{id}")

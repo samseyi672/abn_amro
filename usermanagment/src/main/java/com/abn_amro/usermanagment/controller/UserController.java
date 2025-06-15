@@ -32,6 +32,7 @@ import java.net.URI;
 @RequestMapping("/api/v1/user")
 @Tag(name = "User Management Controller", description = "User Management operations")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private  final UserService userService ;

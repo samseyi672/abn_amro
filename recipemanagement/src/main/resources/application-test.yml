@@ -56,14 +56,14 @@ spring:
       show_sql: true
       format_sql: true
       hibernate:
-        ddl-auto: update
+        ddl-auto: none
         jdbc:
           time_zone: UTC
           open-in-view: false
         generate_statistics: false
-#      sql:
-#        init:
-#          mode: always
+    sql:
+      init:
+        mode: always
 #    config:
 #      import: "optional:configserver:http://localhost:8071/"
 #mail details
@@ -144,12 +144,13 @@ endpoints:
     enabled: true
 eureka:
   instance:
+    hostname: eurekaserver
     preferIpAddress: true
   client:
     fetchRegistry: true
     registerWithEureka: true
-    serviceurl:
-      defaultZone: http://localhost:8761/eureka/
+    service-url:
+      defaultZone: http://eurekaserver:8761/eureka/
 #for description in the eureka microservice network.
 info:
   app:
@@ -160,7 +161,9 @@ info:
 jwt:
   secret-key: "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+bbnnremwwqa+++212abCdEfGhIjKlMnOpQ="
 
-
+user:
+  service:
+    url: http://user:8090
 
 
 

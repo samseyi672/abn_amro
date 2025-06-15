@@ -129,7 +129,7 @@ gateway:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: eurekaserver
     #    instance-id: ${spring.application.name}:${random.value}
     prefer-ip-address: true
 

@@ -19,10 +19,34 @@ The system consists of the following microservices:
 3. **User Management**
     - Manages user registration, authentication, and user profile operations.
     - Ensures secure onboarding and management of users.
+	- Manages user authentication, roles, and profile information.
+    - Entities:
+    - User: Stores user credentials and profile data.
+    - Role: Defines access levels and privileges associated with users.
 
 4. **Recipe Management**
     - Responsible for all operations related to recipe creation, retrieval, updating, and deletion.
     - Acts as the core business service for managing recipes.
+	- Handles recipe-related functionality.
+	- Entities:
+	- Recipe: Contains information like title, instructions, servings, etc.
+	- Ingredient: Linked to Recipe via a One-to-Many relationship.
+	- Tag: A reusable label (e.g., Vegan, Keto).
+	- RecipeTag: Many-to-Many association between Recipe and Tag.
+	
+	Database Schema
+   Each microservice connects to its dedicated MySQL database container using Docker Compose.
+	- user_db stores User and Role tables.
+	- recipe_db stores Recipe, Ingredient, Tag, and RecipeTag tables.
+	ER Relationships
+	- User ↔ Role: Many-to-Many
+	- Recipe ↔ Ingredient: One-to-Many
+	- Recipe ↔ Tag: Many-to-Many via RecipeTag
+	
+	Setup Notes
+	- Create a user first before creating a recipe.
+	- Ensure MySQL containers are healthy before starting services.
+	- Use schema.sql and data.sql for initial table creation and seeding if JPA auto DDL is disabled.
 
 ## System Artifacts
 
@@ -60,7 +84,7 @@ Ensure Docker and Docker Compose are installed on your machine.
 > **Note:** Use the second (internal) Docker Compose file for a lightweight deployment that excludes observability and monitoring components.
 
 ## Accessing API Documentation
-
+    Please create a user first before you can create a recipe
 - **User Management Microservice Swagger UI:**
     - [http://localhost:8090/swagger-ui.html](http://localhost:8090/swagger-ui.html)
 
@@ -70,6 +94,13 @@ Ensure Docker and Docker Compose are installed on your machine.
 ## Support
 
 If you require further clarification or have any questions regarding setup, deployment, or usage, please do not hesitate to reach out.
+
+This system uses MySQL as its relational database engine across its microservices, supporting robust data integrity and complex relationships among entities.
+Microservices Architecture
+Support
+-------
+For issues, raise a ticket in the repository or contact the development team.
+
 
 ---
 -----------------------------------------------------------------------------------------------------------------------------------------
